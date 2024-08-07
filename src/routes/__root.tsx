@@ -41,7 +41,8 @@ function AuthLayout() {
                 <Link to="/">
                     <ActionButton icon={<Home width="24" height="24"/>}/>
                 </Link>
-                <Link to="/favorites">
+                {/*<Link to="/favorites">*/}
+                <Link to="/">
                     <ActionButton icon={<Star width="24" height="24"/>}/>
                 </Link>
                 <ActionButton icon={<Camera width="24" height="24"/>}/>
