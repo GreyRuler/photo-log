@@ -1,4 +1,4 @@
-import {createRootRouteWithContext, Link, LinkProps, Outlet, redirect} from '@tanstack/react-router'
+import {createRootRouteWithContext, Link, LinkProps, Outlet} from '@tanstack/react-router'
 
 import {AuthContext} from '../context/auth'
 import {Bell, BookA, Camera, Home, LogOut, Star, User} from "lucide-react";
