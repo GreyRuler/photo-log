@@ -15,16 +15,16 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-    beforeLoad: ({context, location}) => {
-        if (!context.auth.isAuthenticated && location.pathname !== "/login") {
-            throw redirect({
-                to: '/login',
-                search: {
-                    redirect: location.href,
-                },
-            })
-        }
-    },
+    // beforeLoad: ({context, location}) => {
+    //     if (!context.auth.isAuthenticated && location.pathname !== "/login") {
+    //         throw redirect({
+    //             to: '/login',
+    //             search: {
+    //                 redirect: location.href,
+    //             },
+    //         })
+    //     }
+    // },
     component: AuthLayout,
 })
 

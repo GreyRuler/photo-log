@@ -27,22 +27,12 @@ Route::get('images/{name}', function ($name) {
     return Storage::get("images/$name");
 });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+//Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users', [function () {
         return User::all();
     }]);
-    Route::apiResource('halls', HallController::class);
-    Route::post('/toggle-sale', [HallController::class, 'toggleSale']);
-    Route::apiResource('halls.typePlaces', TypePlaceController::class);
-    Route::apiResource('movies', MovieController::class);
-    Route::get('/schedules/range', [ScheduleController::class, 'range']);
-});
+//});
 
-Route::apiResource('halls.seats', SeatController::class);
-Route::apiResource('schedules', ScheduleController::class);
-Route::get('/movies-for-interval', [MovieController::class, 'moviesForInterval']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/halls/{hall}/amount', [SeatController::class, 'amount']);
-Route::apiResource('schedules.tickets', TicketController::class);
