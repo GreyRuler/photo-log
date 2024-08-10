@@ -1,7 +1,7 @@
-import {createRootRouteWithContext, Link, LinkProps, Outlet} from '@tanstack/react-router'
+import {createRootRouteWithContext, Link, LinkProps, Outlet, redirect} from '@tanstack/react-router'
 
 import {AuthContext} from '../context/auth'
-import {Bell, BookA, Camera, Home, LogOut, Star, User} from "lucide-react";
+import {Bell, BookA, Camera, EyeIcon, Home, LogOut, Star, Upload, User} from "lucide-react";
 import {Button, ButtonProps} from "../components/ui/button";
 import {
     Drawer, DrawerClose,
@@ -15,20 +15,21 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-    // beforeLoad: ({context, location}) => {
-    //     if (!context.auth.isAuthenticated && location.pathname !== "/login") {
-    //         throw redirect({
-    //             to: '/login',
-    //             search: {
-    //                 redirect: location.href,
-    //             },
-    //         })
-    //     }
-    // },
+    beforeLoad: ({context, location}) => {
+        if (!context.auth.isAuthenticated && location.pathname !== "/login") {
+            throw redirect({
+                to: '/login',
+                search: {
+                    redirect: location.href,
+                },
+            })
+        }
+    },
     component: AuthLayout,
 })
 
 function AuthLayout() {
+    // const auth = useAuth()
     return (
         <div className="text-white h-dvh overflow-hidden flex flex-col">
             <header className="w-full bg-primary py-3">
@@ -41,20 +42,32 @@ function AuthLayout() {
                 <Link to="/">
                     <ActionButton icon={<Home width="24" height="24"/>}/>
                 </Link>
-                {/*<Link to="/favorites">*/}
-                <Link to="/">
+                <Link to="/favorites">
                     <ActionButton icon={<Star width="24" height="24"/>}/>
                 </Link>
-                <ActionButton icon={<Camera width="24" height="24"/>}/>
+                <Drawer>
+                    <DrawerTrigger asChild>
+                        <ActionButton icon={<Camera width="24" height="24"/>}/>
+                    </DrawerTrigger>
+                    <DrawerContent className="text-white bg-primary border-none">
+                        <DrawerHeader>
+                            <DrawerTitle>Общие фотографии</DrawerTitle>
+                            <DrawerDescription>Выберите для загрузки фотографий или просмотра</DrawerDescription>
+                        </DrawerHeader>
+                        <div className="grid grid-cols-2 gap-4 p-4">
+                            <DrawerButton title="Загрузить" icon={<Upload width="24" height="24"/>} to="/photos/upload"/>
+                            <DrawerButton title="Просмотреть" icon={<EyeIcon width="24" height="24"/>} to="/photos"/>
+                        </div>
+                    </DrawerContent>
+                </Drawer>
                 <Drawer>
                     <DrawerTrigger asChild>
                         <ActionButton icon={<User width="24" height="24"/>}/>
                     </DrawerTrigger>
                     <DrawerContent className="text-white bg-primary border-none">
                         <DrawerHeader>
-                            <DrawerTitle>Панель администратора</DrawerTitle>
-                            <DrawerDescription>В этой панели вы можете управлять пользователями, фотографиями и
-                                приоритетами. Выберите один из вариантов ниже, чтобы продолжить.</DrawerDescription>
+                            <DrawerTitle>Профиль</DrawerTitle>
+                            <DrawerDescription>{/*auth.user.name*/}</DrawerDescription>
                         </DrawerHeader>
                         <div className="grid grid-cols-2 gap-4 p-4">
                             <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}/>
@@ -72,7 +85,7 @@ type ActionButtonProps = ButtonProps & {
     icon: React.ReactNode
 }
 
-type DrawerButtonProps = LinkProps & {
+export type CustomButtonProps = LinkProps & {
     icon: React.ReactNode
     title: string
 }
@@ -83,7 +96,7 @@ const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(({ic
     </Button>
 ));
 
-const DrawerButton = React.forwardRef<HTMLAnchorElement, DrawerButtonProps>(({ icon, title, ...props }, ref) => (
+const DrawerButton = React.forwardRef<HTMLAnchorElement, CustomButtonProps>(({ icon, title, ...props }, ref) => (
     <DrawerClose asChild>
         <Link ref={ref} className="h-20" {...props}>
             <Button className="flex flex-col h-full w-full bg-slate-800">

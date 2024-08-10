@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {Expense} from "@/api/Expense.ts";
+import {Record} from "@/api/Record.ts";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import {z} from "zod"
@@ -17,24 +17,19 @@ import {Input} from "@/components/ui/input"
 import {Camera} from "lucide-react";
 import {Fragment, useState} from "react";
 import {cn} from "@/lib/utils.ts";
+import {formSchema} from "@/form/record/formShema.ts";
 
 export const Route = createFileRoute('/details/$id')({
-    loader: ({params: {id}}) => Expense.item(id),
+    loader: ({params: {id}}) => Record.item(id),
     component: Details
 })
 
-const formSchema = z.object({
-    count: z.coerce.number().min(1),
-    file: z.instanceof(FileList)
-        .refine((file) => file?.length > 0)
-})
-
 function Details() {
-    const {data: {name, count, innerCount, k, timeArrival, timeEnd, unit, comment}} = Route.useLoaderData()
-    const remainder = count * k - innerCount
+    const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment} = Route.useLoaderData()
+    const max = count * k - innerCount
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
+        resolver: zodResolver(formSchema(max)),
         defaultValues: {
             count: 1,
             file: undefined,
@@ -59,16 +54,16 @@ function Details() {
         }
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
+        Record.photo(id, formData)
     }
 
     return (
-        <div>
+        <div className="h-full overflow-auto">
             <div className="p-2 bg-slate-700 text-center">{name}</div>
             <div className="m-4 p-4 bg-slate-900">
                 <p>Загружено на данный момент: <span className="text-emerald-500 font-bold">{innerCount}</span></p>
-                <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{remainder}</span></p>
+                <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{max}</span></p>
                 <p>Дата, когда можно найти: <span className="text-emerald-500 font-bold">{timeArrival}</span></p>
                 <p>Крайняя дата загрузки: <span className="text-emerald-500 font-bold">{timeEnd}</span></p>
                 <p>Единица измерения: <span className="text-emerald-500 font-bold">{unit}</span></p>
@@ -82,11 +77,11 @@ function Details() {
                             name="count"
                             render={({field}) => (
                                 <FormItem className="flex items-center gap-2 justify-between space-y-0">
-                                    <FormLabel className="text-base whitespace-nowrap">Количество объектов на
-                                        фото</FormLabel>
+                                    <FormLabel className="text-base whitespace-nowrap">
+                                        Количество объектов на фото
+                                    </FormLabel>
                                     <FormControl>
-                                        <Input className="text-right w-14 m-0 text-base" type="number" min={1}
-                                               max={remainder} {...field} />
+                                        <Input className="text-right w-14 m-0 text-base" type="number" step="1" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

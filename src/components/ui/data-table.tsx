@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table"
 import {useState} from "react";
 import {Route} from "@/routes/details.$id";
-import {TExpense} from "@/api/Expense.ts";
+import {TExpense} from "@/api/Record.ts";
 import {cn} from "@/lib/utils.ts";
 
 interface DataTableProps<TData> {

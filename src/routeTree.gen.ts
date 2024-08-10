@@ -13,10 +13,14 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
+import { Route as FavoritesImport } from './routes/favorites'
 import { Route as IndexImport } from './routes/index'
+import { Route as PhotosIndexImport } from './routes/photos/index'
 import { Route as AdministrationIndexImport } from './routes/administration/index'
+import { Route as PhotosUploadImport } from './routes/photos/upload'
 import { Route as DetailsIdImport } from './routes/details.$id'
 import { Route as AdministrationUsersImport } from './routes/administration/users'
+import { Route as AdministrationTableImport } from './routes/administration/table'
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
 import { Route as AdministrationFavoritesImport } from './routes/administration/favorites'
 
@@ -32,13 +36,28 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const FavoritesRoute = FavoritesImport.update({
+  path: '/favorites',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
+const PhotosIndexRoute = PhotosIndexImport.update({
+  path: '/photos/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AdministrationIndexRoute = AdministrationIndexImport.update({
   path: '/administration/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PhotosUploadRoute = PhotosUploadImport.update({
+  path: '/photos/upload',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -49,6 +68,11 @@ const DetailsIdRoute = DetailsIdImport.update({
 
 const AdministrationUsersRoute = AdministrationUsersImport.update({
   path: '/administration/users',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdministrationTableRoute = AdministrationTableImport.update({
+  path: '/administration/table',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -71,6 +95,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -101,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationPhotosImport
       parentRoute: typeof rootRoute
     }
+    '/administration/table': {
+      id: '/administration/table'
+      path: '/administration/table'
+      fullPath: '/administration/table'
+      preLoaderRoute: typeof AdministrationTableImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/users': {
       id: '/administration/users'
       path: '/administration/users'
@@ -115,11 +153,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DetailsIdImport
       parentRoute: typeof rootRoute
     }
+    '/photos/upload': {
+      id: '/photos/upload'
+      path: '/photos/upload'
+      fullPath: '/photos/upload'
+      preLoaderRoute: typeof PhotosUploadImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/': {
       id: '/administration/'
       path: '/administration'
       fullPath: '/administration'
       preLoaderRoute: typeof AdministrationIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/photos/': {
+      id: '/photos/'
+      path: '/photos'
+      fullPath: '/photos'
+      preLoaderRoute: typeof PhotosIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -129,13 +181,17 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  FavoritesRoute,
   LoginRoute,
   LogoutRoute,
   AdministrationFavoritesRoute,
   AdministrationPhotosRoute,
+  AdministrationTableRoute,
   AdministrationUsersRoute,
   DetailsIdRoute,
+  PhotosUploadRoute,
   AdministrationIndexRoute,
+  PhotosIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -147,17 +203,24 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/favorites",
         "/login",
         "/logout",
         "/administration/favorites",
         "/administration/photos",
+        "/administration/table",
         "/administration/users",
         "/details/$id",
-        "/administration/"
+        "/photos/upload",
+        "/administration/",
+        "/photos/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/favorites": {
+      "filePath": "favorites.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -171,14 +234,23 @@ export const routeTree = rootRoute.addChildren({
     "/administration/photos": {
       "filePath": "administration/photos.tsx"
     },
+    "/administration/table": {
+      "filePath": "administration/table.tsx"
+    },
     "/administration/users": {
       "filePath": "administration/users.tsx"
     },
     "/details/$id": {
       "filePath": "details.$id.tsx"
     },
+    "/photos/upload": {
+      "filePath": "photos/upload.tsx"
+    },
     "/administration/": {
       "filePath": "administration/index.tsx"
+    },
+    "/photos/": {
+      "filePath": "photos/index.tsx"
     }
   }
 }

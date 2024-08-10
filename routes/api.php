@@ -1,12 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HallController;
-use App\Http\Controllers\MovieController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\SeatController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\TypePlaceController;
+use App\Http\Controllers\RecordController;
+use App\Http\Controllers\SheetController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -27,12 +23,15 @@ Route::get('images/{name}', function ($name) {
     return Storage::get("images/$name");
 });
 
-//Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users', [function () {
         return User::all();
     }]);
-//});
+    Route::post('/sheet/collect', [SheetController::class, 'collect']);
+    Route::apiResource('records', RecordController::class);
+    Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
+});
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);

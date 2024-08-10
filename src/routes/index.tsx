@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {Expense, TExpense} from "@/api/Expense.ts";
+import {Record, TExpense} from "@/api/Record.ts";
 import {ColumnDef} from "@tanstack/react-table";
 import {DataTable} from "@/components/ui/data-table";
 import {Search, Triangle} from "lucide-react";
@@ -9,7 +9,7 @@ import {Label} from "@/components/ui/label.tsx";
 import {cn} from "@/lib/utils.ts";
 
 export const Route = createFileRoute('/')({
-    loader: () => Expense.list(),
+    loader: () => Record.list(),
     component: IndexLayout,
 })
 
@@ -46,7 +46,7 @@ export const columns: ColumnDef<TExpense>[] = [
 ]
 
 function IndexLayout() {
-    const {data} = Route.useLoaderData()
+    const data = Route.useLoaderData()
 
     return (
         <div className="p-4 h-full">
