@@ -71,7 +71,7 @@ export function DataTable(
                                 onClick={
                                     row.original.number
                                         ? row.getToggleExpandedHandler()
-                                        : () => navigate({to: '/details/$id', params: {id: row.original.id}})
+                                        : () => navigate({to: '/details/$id', params: {id: String(row.original.id)}})
                                 }
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
