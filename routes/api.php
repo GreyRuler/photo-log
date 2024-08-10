@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\SheetController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -24,14 +25,11 @@ Route::get('images/{name}', function ($name) {
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/users', [function () {
-        return User::all();
-    }]);
+    Route::apiResource('users', UserController::class);
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
     Route::apiResource('records', RecordController::class);
     Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);

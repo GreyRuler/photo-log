@@ -58,10 +58,8 @@ function LoginComponent() {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsSubmitting(true)
         try {
-            const {username} = data
-            const {user, token} = await User.login(data)
-            console.log(user, token)
-            await auth.login(username, token)
+            const user = await User.login(data)
+            await auth.login(user)
 
             await router.invalidate()
 

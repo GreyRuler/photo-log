@@ -1,46 +1,33 @@
 import * as React from 'react'
 
-import { sleep } from '../lib/utils'
+import {getStoredUser, setStoredUser, sleep} from '../lib/utils'
+import {TUser} from "@/api/User.ts";
 
 export interface AuthContext {
     isAuthenticated: boolean
-    login: (username: string, token: string) => Promise<void>
+    login: (user: TUser) => Promise<void>
     logout: () => Promise<void>
-    user: string | null
+    user: TUser | null
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null)
 
-const key = 'ACCESS_TOKEN'
-
-function getStoredUser() {
-    return localStorage.getItem(key)
-}
-
-function setStoredKey(token: string | null) {
-    if (token) {
-        localStorage.setItem(key, token)
-    } else {
-        localStorage.removeItem(key)
-    }
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = React.useState<string | null>(getStoredUser())
+    const [user, setUser] = React.useState<TUser | null>(getStoredUser())
     const isAuthenticated = !!user
 
     const logout = React.useCallback(async () => {
         await sleep(250)
 
-        setStoredKey(null)
+        setStoredUser(null)
         setUser(null)
     }, [])
 
-    const login = React.useCallback(async (username: string, token: string) => {
+    const login = React.useCallback(async (user: TUser) => {
         await sleep(500)
 
-        setStoredKey(token)
-        setUser(username)
+        setStoredUser(user)
+        setUser(user)
     }, [])
 
     React.useEffect(() => {

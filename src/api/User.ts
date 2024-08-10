@@ -1,17 +1,10 @@
 import axiosClient from "./axios-client";
 
-type LoginResponse = {
-    user: TUser
-    token: string
-}
-
-type TUser = {
+export type TUser = {
     id: number
     name: string
     username: string
-    email_verified_at: string
-    created_at: string
-    updated_at: string
+    token: string
 }
 
 export default class User {
@@ -21,7 +14,7 @@ export default class User {
     }
 
     static async login({username, password}: { username: string, password: string }) {
-        const {data} = await axiosClient.post<LoginResponse>('/login', {username, password})
+        const {data} = await axiosClient.post<TUser>('/login', {username, password})
         return data
     }
 }

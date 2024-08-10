@@ -1,6 +1,6 @@
 import {createRootRouteWithContext, Link, LinkProps, Outlet, redirect} from '@tanstack/react-router'
 
-import {AuthContext} from '../context/auth'
+import {AuthContext, useAuth} from '../context/auth'
 import {Bell, BookA, Camera, EyeIcon, Home, LogOut, Star, Upload, User} from "lucide-react";
 import {Button, ButtonProps} from "../components/ui/button";
 import {
@@ -29,7 +29,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function AuthLayout() {
-    // const auth = useAuth()
+    const auth = useAuth()
+
     return (
         <div className="text-white h-dvh overflow-hidden flex flex-col">
             <header className="w-full bg-primary py-3">
@@ -67,7 +68,7 @@ function AuthLayout() {
                     <DrawerContent className="text-white bg-primary border-none">
                         <DrawerHeader>
                             <DrawerTitle>Профиль</DrawerTitle>
-                            <DrawerDescription>{/*auth.user.name*/}</DrawerDescription>
+                            <DrawerDescription>{auth.user?.name}</DrawerDescription>
                         </DrawerHeader>
                         <div className="grid grid-cols-2 gap-4 p-4">
                             <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}/>

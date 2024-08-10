@@ -1,25 +1,26 @@
 import axios from "axios";
+import {API_ENDPOINT} from "@/config.ts";
+import {getStoredUser, setStoredUser} from "@/lib/utils.ts";
 
 const axiosClient = axios.create({
-  baseURL: '/api'
+    baseURL: API_ENDPOINT
 })
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('ACCESS_TOKEN');
-  config.headers.Authorization = `Bearer ${token}`
-  return config;
+    const user = getStoredUser();
+    config.headers.Authorization = `Bearer ${user?.token}`
+    return config;
 })
 
 axiosClient.interceptors.response.use((response) => {
-  return response
+    return response
 }, (error) => {
-  const {response} = error;
-  if (response.status === 401) {
-    localStorage.removeItem('ACCESS_TOKEN')
-    // window.location.reload();
-  }
+    const {response} = error;
+    if (response.status === 401) {
+        setStoredUser(null)
+    }
 
-  throw error;
+    throw error;
 })
 
 export default axiosClient
