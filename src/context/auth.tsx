@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import {getStoredUser, setStoredUser, sleep} from '../lib/utils'
 import {TUser} from "@/api/User.ts";
+import {flushSync} from "react-dom";
 
 export interface AuthContext {
     isAuthenticated: boolean
@@ -20,7 +21,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await sleep(250)
 
         setStoredUser(null)
-        setUser(null)
+        flushSync(() => {
+            setUser(null)
+        });
     }, [])
 
     const login = React.useCallback(async (user: TUser) => {
