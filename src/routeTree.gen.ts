@@ -19,10 +19,13 @@ import { Route as PhotosIndexImport } from './routes/photos/index'
 import { Route as AdministrationIndexImport } from './routes/administration/index'
 import { Route as PhotosUploadImport } from './routes/photos/upload'
 import { Route as DetailsIdImport } from './routes/details.$id'
-import { Route as AdministrationUsersImport } from './routes/administration/users'
 import { Route as AdministrationTableImport } from './routes/administration/table'
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
 import { Route as AdministrationFavoritesImport } from './routes/administration/favorites'
+import { Route as AdministrationUsersIndexImport } from './routes/administration/users/index'
+import { Route as AdministrationUsersCreateImport } from './routes/administration/users/create'
+import { Route as AdministrationUsersIdUpdateImport } from './routes/administration/users/$id.update'
+import { Route as AdministrationUsersIdDeleteImport } from './routes/administration/users/$id.delete'
 
 // Create/Update Routes
 
@@ -66,11 +69,6 @@ const DetailsIdRoute = DetailsIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdministrationUsersRoute = AdministrationUsersImport.update({
-  path: '/administration/users',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AdministrationTableRoute = AdministrationTableImport.update({
   path: '/administration/table',
   getParentRoute: () => rootRoute,
@@ -85,6 +83,28 @@ const AdministrationFavoritesRoute = AdministrationFavoritesImport.update({
   path: '/administration/favorites',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AdministrationUsersIndexRoute = AdministrationUsersIndexImport.update({
+  path: '/administration/users/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdministrationUsersCreateRoute = AdministrationUsersCreateImport.update({
+  path: '/administration/users/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdministrationUsersIdUpdateRoute =
+  AdministrationUsersIdUpdateImport.update({
+    path: '/administration/users/$id/update',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdministrationUsersIdDeleteRoute =
+  AdministrationUsersIdDeleteImport.update({
+    path: '/administration/users/$id/delete',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -139,13 +159,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationTableImport
       parentRoute: typeof rootRoute
     }
-    '/administration/users': {
-      id: '/administration/users'
-      path: '/administration/users'
-      fullPath: '/administration/users'
-      preLoaderRoute: typeof AdministrationUsersImport
-      parentRoute: typeof rootRoute
-    }
     '/details/$id': {
       id: '/details/$id'
       path: '/details/$id'
@@ -174,6 +187,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhotosIndexImport
       parentRoute: typeof rootRoute
     }
+    '/administration/users/create': {
+      id: '/administration/users/create'
+      path: '/administration/users/create'
+      fullPath: '/administration/users/create'
+      preLoaderRoute: typeof AdministrationUsersCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/users/': {
+      id: '/administration/users/'
+      path: '/administration/users'
+      fullPath: '/administration/users'
+      preLoaderRoute: typeof AdministrationUsersIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/users/$id/delete': {
+      id: '/administration/users/$id/delete'
+      path: '/administration/users/$id/delete'
+      fullPath: '/administration/users/$id/delete'
+      preLoaderRoute: typeof AdministrationUsersIdDeleteImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/users/$id/update': {
+      id: '/administration/users/$id/update'
+      path: '/administration/users/$id/update'
+      fullPath: '/administration/users/$id/update'
+      preLoaderRoute: typeof AdministrationUsersIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -187,11 +228,14 @@ export const routeTree = rootRoute.addChildren({
   AdministrationFavoritesRoute,
   AdministrationPhotosRoute,
   AdministrationTableRoute,
-  AdministrationUsersRoute,
   DetailsIdRoute,
   PhotosUploadRoute,
   AdministrationIndexRoute,
   PhotosIndexRoute,
+  AdministrationUsersCreateRoute,
+  AdministrationUsersIndexRoute,
+  AdministrationUsersIdDeleteRoute,
+  AdministrationUsersIdUpdateRoute,
 })
 
 /* prettier-ignore-end */
@@ -209,11 +253,14 @@ export const routeTree = rootRoute.addChildren({
         "/administration/favorites",
         "/administration/photos",
         "/administration/table",
-        "/administration/users",
         "/details/$id",
         "/photos/upload",
         "/administration/",
-        "/photos/"
+        "/photos/",
+        "/administration/users/create",
+        "/administration/users/",
+        "/administration/users/$id/delete",
+        "/administration/users/$id/update"
       ]
     },
     "/": {
@@ -237,9 +284,6 @@ export const routeTree = rootRoute.addChildren({
     "/administration/table": {
       "filePath": "administration/table.tsx"
     },
-    "/administration/users": {
-      "filePath": "administration/users.tsx"
-    },
     "/details/$id": {
       "filePath": "details.$id.tsx"
     },
@@ -251,6 +295,18 @@ export const routeTree = rootRoute.addChildren({
     },
     "/photos/": {
       "filePath": "photos/index.tsx"
+    },
+    "/administration/users/create": {
+      "filePath": "administration/users/create.tsx"
+    },
+    "/administration/users/": {
+      "filePath": "administration/users/index.tsx"
+    },
+    "/administration/users/$id/delete": {
+      "filePath": "administration/users/$id.delete.tsx"
+    },
+    "/administration/users/$id/update": {
+      "filePath": "administration/users/$id.update.tsx"
     }
   }
 }

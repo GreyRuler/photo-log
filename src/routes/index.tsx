@@ -9,7 +9,7 @@ import {Label} from "@/components/ui/label.tsx";
 import {cn} from "@/lib/utils.ts";
 
 export const Route = createFileRoute('/')({
-    loader: () => Record.list(),
+    loader: () => Record.list<TExpense>(),
     component: IndexLayout,
 })
 
@@ -49,7 +49,7 @@ function IndexLayout() {
     const data = Route.useLoaderData()
 
     return (
-        <div className="p-4 h-full">
+        <div className="h-full">
             <DataTable columns={columns} data={data}/>
         </div>
     )

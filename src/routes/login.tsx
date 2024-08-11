@@ -28,7 +28,7 @@ export const Route = createFileRoute('/login')({
             throw redirect({to: search.redirect || fallback})
         }
     },
-    component: LoginComponent,
+    component: Login,
 })
 
 const formSchema = z.object({
@@ -38,7 +38,7 @@ const formSchema = z.object({
     password: z.string().min(5, "Длина пароля не меньше 5 символов"),
 })
 
-function LoginComponent() {
+function Login() {
     const auth = useAuth()
     const router = useRouter()
     const isLoading = useRouterState({select: (s) => s.isLoading})

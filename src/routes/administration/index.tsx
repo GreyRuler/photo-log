@@ -1,8 +1,7 @@
-import {createFileRoute, Link} from '@tanstack/react-router'
+import {createFileRoute, Link, LinkProps} from '@tanstack/react-router'
 import {Button} from "@/components/ui/button.tsx";
 import {Images, Sheet, Star, User} from "lucide-react";
 import React from "react";
-import {CustomButtonProps} from "@/routes/__root.tsx";
 
 export const Route = createFileRoute('/administration/')({
   component: Administration
@@ -19,7 +18,12 @@ function Administration() {
     )
 }
 
-const LinkButton = React.forwardRef<HTMLAnchorElement, CustomButtonProps>(({ icon, title, ...props }, ref) => (
+export type CustomLinkProps = LinkProps & {
+    icon: React.ReactNode
+    title: string
+}
+
+const LinkButton = React.forwardRef<HTMLAnchorElement, CustomLinkProps>(({ icon, title, ...props }, ref) => (
     <Link ref={ref} {...props}>
         <Button className="flex flex-col h-32 w-full">
             {icon}

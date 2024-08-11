@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {Record} from "@/api/Record.ts";
+import {Record, TExpense} from "@/api/Record.ts";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import {z} from "zod"
@@ -20,7 +20,7 @@ import {cn} from "@/lib/utils.ts";
 import {formSchema} from "@/form/record/formShema.ts";
 
 export const Route = createFileRoute('/details/$id')({
-    loader: ({params: {id}}) => Record.item(id),
+    loader: ({params: {id}}) => Record.item<TExpense>(id),
     component: Details
 })
 

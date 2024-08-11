@@ -29,12 +29,19 @@ class SignupRequest extends FormRequest
             'username' => ['required', 'string', 'unique:users,username', 'max:255'],
             'password' => [
                 'required',
-                'confirmed',
                 Password::min(8)
                     ->letters()
                     ->symbols()
                     ->numbers()
-            ]
+            ],
+            'isAdmin' => ['required', 'boolean'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'isAdmin' => filter_var($this->isAdmin, FILTER_VALIDATE_BOOLEAN),
+        ]);
     }
 }

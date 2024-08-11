@@ -1,4 +1,4 @@
-import {createRootRouteWithContext, Link, LinkProps, Outlet, redirect} from '@tanstack/react-router'
+import {createRootRouteWithContext, Link, Outlet, redirect} from '@tanstack/react-router'
 
 import {AuthContext, useAuth} from '../context/auth'
 import {Bell, BookA, Camera, EyeIcon, Home, LogOut, Star, Upload, User} from "lucide-react";
@@ -9,6 +9,7 @@ import {
     DrawerTrigger
 } from "../components/ui/drawer";
 import React from "react";
+import {CustomLinkProps} from "@/routes/administration";
 
 interface MyRouterContext {
     auth: AuthContext
@@ -16,7 +17,7 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
     beforeLoad: ({context, location}) => {
-        if (!context.auth.isAuthenticated && location.pathname !== "/login") {
+        if (!context.auth.user && location.pathname !== "/login") {
             throw redirect({
                 to: '/login',
                 search: {
@@ -56,8 +57,10 @@ function AuthLayout() {
                             <DrawerDescription>Выберите для загрузки фотографий или просмотра</DrawerDescription>
                         </DrawerHeader>
                         <div className="grid grid-cols-2 gap-4 p-4">
-                            <DrawerButton title="Загрузить" icon={<Upload width="24" height="24"/>} to="/photos/upload"/>
-                            <DrawerButton title="Просмотреть" icon={<EyeIcon width="24" height="24"/>} to="/photos"/>
+                            <DrawerButton title="Загрузить" icon={<Upload width="24" height="24"/>}
+                                          to="/photos/upload"/>
+                            <DrawerButton title="Просмотреть" icon={<EyeIcon width="24" height="24"/>}
+                                          to="/photos"/>
                         </div>
                     </DrawerContent>
                 </Drawer>
@@ -71,9 +74,12 @@ function AuthLayout() {
                             <DrawerDescription>{auth.user?.name}</DrawerDescription>
                         </DrawerHeader>
                         <div className="grid grid-cols-2 gap-4 p-4">
-                            <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}/>
-                            <DrawerButton title="Выйти" icon={<LogOut width="24" height="24"/>} to="/logout"/>
-                            <DrawerButton title="Панель администратора" icon={<BookA width="24" height="24"/>} to="/administration"/>
+                            <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}
+                                          to="/"/>
+                            <DrawerButton title="Выйти" icon={<LogOut width="24" height="24"/>}
+                                          to="/logout" preload={false}/>
+                            <DrawerButton title="Панель администратора" icon={<BookA width="24" height="24"/>}
+                                          to="/administration"/>
                         </div>
                     </DrawerContent>
                 </Drawer>
@@ -86,18 +92,13 @@ type ActionButtonProps = ButtonProps & {
     icon: React.ReactNode
 }
 
-export type CustomButtonProps = LinkProps & {
-    icon: React.ReactNode
-    title: string
-}
-
 const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(({icon, ...props}, ref) => (
     <Button ref={ref} {...props} className="rounded-full w-12 h-12 p-0">
         {icon}
     </Button>
 ));
 
-const DrawerButton = React.forwardRef<HTMLAnchorElement, CustomButtonProps>(({ icon, title, ...props }, ref) => (
+const DrawerButton = React.forwardRef<HTMLAnchorElement, CustomLinkProps>(({icon, title, ...props}, ref) => (
     <DrawerClose asChild>
         <Link ref={ref} className="h-20" {...props}>
             <Button className="flex flex-col h-full w-full bg-slate-800">

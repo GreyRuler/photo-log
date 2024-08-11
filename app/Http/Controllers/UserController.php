@@ -27,6 +27,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
+            'isAdmin' => $data['isAdmin'] === 'true',
         ]);
 
         return response()->json($user);
@@ -51,6 +52,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
+            'isAdmin' => $data['isAdmin'] === 'true',
         ]);
     }
 

@@ -1,51 +1,78 @@
+import {Link, createFileRoute} from '@tanstack/react-router'
+import User, {TUser} from "@/api/User.ts";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
+
 import {
-    ColumnDef, ExpandedState,
+    ColumnDef,
     flexRender,
-    getCoreRowModel, getExpandedRowModel, getFilteredRowModel,
+    getCoreRowModel, getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table"
+import {Pencil, Plus, Trash} from 'lucide-react';
+import {Button} from "@/components/ui/button.tsx";
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import {useState} from "react";
-import {Route} from "@/routes/details.$id";
-import {TExpense} from "@/api/Record.ts";
-import {cn} from "@/lib/utils.ts";
+export const Route = createFileRoute('/administration/users/')({
+    loader: () => User.list(),
+    component: AdministrationUsers
+})
 
-interface DataTableProps<TData> {
-    columns: ColumnDef<TData>[]
-    data: TData[]
-}
+export const columns: ColumnDef<TUser>[] = [
+    {
+        accessorKey: "id",
+        header: "id",
+    },
+    {
+        accessorKey: "name",
+        header: "Имя",
+    },
+    {
+        accessorKey: "username",
+        header: "Логин",
+    },
+    {
+        accessorKey: "password",
+        header: "Пароль",
+        cell: "********"
+    },
+    {
+        accessorKey: "role",
+        header: "Роль",
+    },
+    {
+        id: "actions",
+        enableHiding: false,
+        header: () => (
+            <Link to="/administration/users/create">
+                <Button className="rounded-full p-2"><Plus size={20}/></Button>
+            </Link>
+        ),
+        cell: ({row}) => (
+            <div className="flex gap-2">
+                <Link to={`/administration/users/${row.original.id}/update`}>
+                    <Button className="rounded-full p-2"><Pencil size={20}/></Button>
+                </Link>
+                <Link to={`/administration/users/${row.original.id}/delete`} preload={false}>
+                    <Button className="rounded-full p-2"><Trash size={20}/></Button>
+                </Link>
+            </div>
+        ),
+    },
+]
 
-export function DataTable(
-    {columns, data}: DataTableProps<TExpense>
-) {
-    const navigate = Route.useNavigate()
-    const [expanded, setExpanded] = useState<ExpandedState>({});
+function AdministrationUsers() {
+    const users = Route.useLoaderData()
 
     const table = useReactTable({
-        data,
+        data: users,
         columns,
-        state: {
-            expanded,
-        },
-        onExpandedChange: setExpanded,
-        getSubRows: (row) => row.subRows,
         getCoreRowModel: getCoreRowModel(),
-        getExpandedRowModel: getExpandedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         filterFromLeafRows: true, // filter and search through sub-rows
     })
 
     return (
         <div className="flex h-full">
-            <Table>
+            <Table className="border-slate-500">
                 <TableHeader className="sticky top-0 z-50 bg-slate-800 outline outline-1 outline-slate-500 ">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id} className="w-full hover:bg-inherit border-slate-500">
@@ -68,17 +95,9 @@ export function DataTable(
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
-                                onClick={
-                                    row.original.number
-                                        ? row.getToggleExpandedHandler()
-                                        : () => navigate({to: '/details/$id', params: {id: String(row.original.id)}})
-                                }
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
-                                className={cn(
-                                    !row.original.count && !row.original.number && "pointer-events-none text-slate-400",
-                                    "border-slate-500",
-                                )}
+                                className="border-slate-500"
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>

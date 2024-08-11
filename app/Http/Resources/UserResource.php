@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'username' => $this->username,
             'token' => $this->createToken('main')->plainTextToken,
+            'isAdmin' => $this->isAdmin,
         ];
     }
 }

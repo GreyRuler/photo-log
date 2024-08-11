@@ -24,6 +24,7 @@ class AdminFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt('admin'), // password
             'remember_token' => Str::random(10),
+            'isAdmin' => true,
         ];
     }
 }
