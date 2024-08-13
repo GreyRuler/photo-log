@@ -1,6 +1,6 @@
 import {createFileRoute, Link, LinkProps} from '@tanstack/react-router'
 import {Button} from "@/components/ui/button.tsx";
-import {Folder, Images, Sheet, Star, User} from "lucide-react";
+import {Bell, Folder, Images, Sheet, Star, User} from "lucide-react";
 import React from "react";
 
 export const Route = createFileRoute('/administration/')({
@@ -13,6 +13,7 @@ function Administration() {
             <LinkButton icon={<Sheet width="24" height="24"/>} title="Таблица" to="/administration/table"/>
             <LinkButton icon={<User width="24" height="24"/>} title="Пользователи" to="/administration/users"/>
             <LinkButton icon={<Folder width="24" height="24"/>} title="Категории" to="/administration/categories"/>
+            <LinkButton icon={<Bell width="24" height="24"/>} title="Уведомления" to="/administration/notifications"/>
             <LinkButton icon={<Star width="24" height="24"/>} title="Приоритет" to="/administration/favorites"/>
             <LinkButton icon={<Images width="24" height="24"/>} title="Фотографии" to="/administration/photos"/>
         </div>

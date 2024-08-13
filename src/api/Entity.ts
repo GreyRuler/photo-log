@@ -19,7 +19,7 @@ export default class Entity {
     }
 
     static async update<T, TData>(id: string, formData: TData) {
-        const {data} = await axiosClient.putForm<T>(`${this.URL}/${id}`, formData)
+        const {data} = await axiosClient.put<T>(`${this.URL}/${id}`, formData)
         return data
     }
 

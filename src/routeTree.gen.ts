@@ -23,11 +23,15 @@ import { Route as AdministrationTableImport } from './routes/administration/tabl
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
 import { Route as AdministrationFavoritesImport } from './routes/administration/favorites'
 import { Route as AdministrationUsersIndexImport } from './routes/administration/users/index'
+import { Route as AdministrationNotificationsIndexImport } from './routes/administration/notifications/index'
 import { Route as AdministrationCategoriesIndexImport } from './routes/administration/categories/index'
 import { Route as AdministrationUsersCreateImport } from './routes/administration/users/create'
+import { Route as AdministrationNotificationsCreateImport } from './routes/administration/notifications/create'
 import { Route as AdministrationCategoriesCreateImport } from './routes/administration/categories/create'
 import { Route as AdministrationUsersIdUpdateImport } from './routes/administration/users/$id.update'
 import { Route as AdministrationUsersIdDeleteImport } from './routes/administration/users/$id.delete'
+import { Route as AdministrationNotificationsIdUpdateImport } from './routes/administration/notifications/$id.update'
+import { Route as AdministrationNotificationsIdDeleteImport } from './routes/administration/notifications/$id.delete'
 import { Route as AdministrationCategoriesIdUpdateImport } from './routes/administration/categories/$id.update'
 import { Route as AdministrationCategoriesIdDeleteImport } from './routes/administration/categories/$id.delete'
 
@@ -93,6 +97,12 @@ const AdministrationUsersIndexRoute = AdministrationUsersIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdministrationNotificationsIndexRoute =
+  AdministrationNotificationsIndexImport.update({
+    path: '/administration/notifications/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 const AdministrationCategoriesIndexRoute =
   AdministrationCategoriesIndexImport.update({
     path: '/administration/categories/',
@@ -103,6 +113,12 @@ const AdministrationUsersCreateRoute = AdministrationUsersCreateImport.update({
   path: '/administration/users/create',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AdministrationNotificationsCreateRoute =
+  AdministrationNotificationsCreateImport.update({
+    path: '/administration/notifications/create',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const AdministrationCategoriesCreateRoute =
   AdministrationCategoriesCreateImport.update({
@@ -119,6 +135,18 @@ const AdministrationUsersIdUpdateRoute =
 const AdministrationUsersIdDeleteRoute =
   AdministrationUsersIdDeleteImport.update({
     path: '/administration/users/$id/delete',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdministrationNotificationsIdUpdateRoute =
+  AdministrationNotificationsIdUpdateImport.update({
+    path: '/administration/notifications/$id/update',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdministrationNotificationsIdDeleteRoute =
+  AdministrationNotificationsIdDeleteImport.update({
+    path: '/administration/notifications/$id/delete',
     getParentRoute: () => rootRoute,
   } as any)
 
@@ -222,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationCategoriesCreateImport
       parentRoute: typeof rootRoute
     }
+    '/administration/notifications/create': {
+      id: '/administration/notifications/create'
+      path: '/administration/notifications/create'
+      fullPath: '/administration/notifications/create'
+      preLoaderRoute: typeof AdministrationNotificationsCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/users/create': {
       id: '/administration/users/create'
       path: '/administration/users/create'
@@ -234,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/administration/categories'
       fullPath: '/administration/categories'
       preLoaderRoute: typeof AdministrationCategoriesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/notifications/': {
+      id: '/administration/notifications/'
+      path: '/administration/notifications'
+      fullPath: '/administration/notifications'
+      preLoaderRoute: typeof AdministrationNotificationsIndexImport
       parentRoute: typeof rootRoute
     }
     '/administration/users/': {
@@ -255,6 +297,20 @@ declare module '@tanstack/react-router' {
       path: '/administration/categories/$id/update'
       fullPath: '/administration/categories/$id/update'
       preLoaderRoute: typeof AdministrationCategoriesIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/notifications/$id/delete': {
+      id: '/administration/notifications/$id/delete'
+      path: '/administration/notifications/$id/delete'
+      fullPath: '/administration/notifications/$id/delete'
+      preLoaderRoute: typeof AdministrationNotificationsIdDeleteImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/notifications/$id/update': {
+      id: '/administration/notifications/$id/update'
+      path: '/administration/notifications/$id/update'
+      fullPath: '/administration/notifications/$id/update'
+      preLoaderRoute: typeof AdministrationNotificationsIdUpdateImport
       parentRoute: typeof rootRoute
     }
     '/administration/users/$id/delete': {
@@ -289,11 +345,15 @@ export const routeTree = rootRoute.addChildren({
   AdministrationIndexRoute,
   PhotosIndexRoute,
   AdministrationCategoriesCreateRoute,
+  AdministrationNotificationsCreateRoute,
   AdministrationUsersCreateRoute,
   AdministrationCategoriesIndexRoute,
+  AdministrationNotificationsIndexRoute,
   AdministrationUsersIndexRoute,
   AdministrationCategoriesIdDeleteRoute,
   AdministrationCategoriesIdUpdateRoute,
+  AdministrationNotificationsIdDeleteRoute,
+  AdministrationNotificationsIdUpdateRoute,
   AdministrationUsersIdDeleteRoute,
   AdministrationUsersIdUpdateRoute,
 })
@@ -318,11 +378,15 @@ export const routeTree = rootRoute.addChildren({
         "/administration/",
         "/photos/",
         "/administration/categories/create",
+        "/administration/notifications/create",
         "/administration/users/create",
         "/administration/categories/",
+        "/administration/notifications/",
         "/administration/users/",
         "/administration/categories/$id/delete",
         "/administration/categories/$id/update",
+        "/administration/notifications/$id/delete",
+        "/administration/notifications/$id/update",
         "/administration/users/$id/delete",
         "/administration/users/$id/update"
       ]
@@ -363,11 +427,17 @@ export const routeTree = rootRoute.addChildren({
     "/administration/categories/create": {
       "filePath": "administration/categories/create.tsx"
     },
+    "/administration/notifications/create": {
+      "filePath": "administration/notifications/create.tsx"
+    },
     "/administration/users/create": {
       "filePath": "administration/users/create.tsx"
     },
     "/administration/categories/": {
       "filePath": "administration/categories/index.tsx"
+    },
+    "/administration/notifications/": {
+      "filePath": "administration/notifications/index.tsx"
     },
     "/administration/users/": {
       "filePath": "administration/users/index.tsx"
@@ -377,6 +447,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/administration/categories/$id/update": {
       "filePath": "administration/categories/$id.update.tsx"
+    },
+    "/administration/notifications/$id/delete": {
+      "filePath": "administration/notifications/$id.delete.tsx"
+    },
+    "/administration/notifications/$id/update": {
+      "filePath": "administration/notifications/$id.update.tsx"
     },
     "/administration/users/$id/delete": {
       "filePath": "administration/users/$id.delete.tsx"
