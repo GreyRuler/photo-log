@@ -7,7 +7,6 @@ export const Route = createFileRoute('/logout')({
         await context.auth.logout()
         throw redirect({
             to: '/login',
-            throw: true,
         })
     },
 })

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\SheetController;
 use App\Http\Controllers\UserController;
@@ -28,6 +30,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('users', UserController::class);
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
     Route::apiResource('records', RecordController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('notifications', NotificationController::class);
     Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });

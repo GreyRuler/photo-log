@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import User, {TUser} from "@/api/User.ts";
+
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 
 import {
@@ -7,14 +7,15 @@ import {
     getCoreRowModel, getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import {columns} from "@/datatable/users/columns.tsx";
+import {columns} from "@/datatable/categories/columns.tsx";
+import Category, {TCategory} from "@/api/Category.ts";
 
-export const Route = createFileRoute('/administration/users/')({
-    loader: () => User.list<TUser>(),
-    component: AdministrationUsers
+export const Route = createFileRoute('/administration/categories/')({
+    loader: () => Category.list<TCategory>(),
+    component: AdministrationCategories,
 })
 
-function AdministrationUsers() {
+function AdministrationCategories() {
     const data = Route.useLoaderData()
 
     const table = useReactTable({

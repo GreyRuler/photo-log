@@ -23,9 +23,13 @@ import { Route as AdministrationTableImport } from './routes/administration/tabl
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
 import { Route as AdministrationFavoritesImport } from './routes/administration/favorites'
 import { Route as AdministrationUsersIndexImport } from './routes/administration/users/index'
+import { Route as AdministrationCategoriesIndexImport } from './routes/administration/categories/index'
 import { Route as AdministrationUsersCreateImport } from './routes/administration/users/create'
+import { Route as AdministrationCategoriesCreateImport } from './routes/administration/categories/create'
 import { Route as AdministrationUsersIdUpdateImport } from './routes/administration/users/$id.update'
 import { Route as AdministrationUsersIdDeleteImport } from './routes/administration/users/$id.delete'
+import { Route as AdministrationCategoriesIdUpdateImport } from './routes/administration/categories/$id.update'
+import { Route as AdministrationCategoriesIdDeleteImport } from './routes/administration/categories/$id.delete'
 
 // Create/Update Routes
 
@@ -89,10 +93,22 @@ const AdministrationUsersIndexRoute = AdministrationUsersIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdministrationCategoriesIndexRoute =
+  AdministrationCategoriesIndexImport.update({
+    path: '/administration/categories/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 const AdministrationUsersCreateRoute = AdministrationUsersCreateImport.update({
   path: '/administration/users/create',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AdministrationCategoriesCreateRoute =
+  AdministrationCategoriesCreateImport.update({
+    path: '/administration/categories/create',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const AdministrationUsersIdUpdateRoute =
   AdministrationUsersIdUpdateImport.update({
@@ -103,6 +119,18 @@ const AdministrationUsersIdUpdateRoute =
 const AdministrationUsersIdDeleteRoute =
   AdministrationUsersIdDeleteImport.update({
     path: '/administration/users/$id/delete',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdministrationCategoriesIdUpdateRoute =
+  AdministrationCategoriesIdUpdateImport.update({
+    path: '/administration/categories/$id/update',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdministrationCategoriesIdDeleteRoute =
+  AdministrationCategoriesIdDeleteImport.update({
+    path: '/administration/categories/$id/delete',
     getParentRoute: () => rootRoute,
   } as any)
 
@@ -187,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhotosIndexImport
       parentRoute: typeof rootRoute
     }
+    '/administration/categories/create': {
+      id: '/administration/categories/create'
+      path: '/administration/categories/create'
+      fullPath: '/administration/categories/create'
+      preLoaderRoute: typeof AdministrationCategoriesCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/users/create': {
       id: '/administration/users/create'
       path: '/administration/users/create'
@@ -194,11 +229,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationUsersCreateImport
       parentRoute: typeof rootRoute
     }
+    '/administration/categories/': {
+      id: '/administration/categories/'
+      path: '/administration/categories'
+      fullPath: '/administration/categories'
+      preLoaderRoute: typeof AdministrationCategoriesIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/users/': {
       id: '/administration/users/'
       path: '/administration/users'
       fullPath: '/administration/users'
       preLoaderRoute: typeof AdministrationUsersIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/categories/$id/delete': {
+      id: '/administration/categories/$id/delete'
+      path: '/administration/categories/$id/delete'
+      fullPath: '/administration/categories/$id/delete'
+      preLoaderRoute: typeof AdministrationCategoriesIdDeleteImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/categories/$id/update': {
+      id: '/administration/categories/$id/update'
+      path: '/administration/categories/$id/update'
+      fullPath: '/administration/categories/$id/update'
+      preLoaderRoute: typeof AdministrationCategoriesIdUpdateImport
       parentRoute: typeof rootRoute
     }
     '/administration/users/$id/delete': {
@@ -232,8 +288,12 @@ export const routeTree = rootRoute.addChildren({
   PhotosUploadRoute,
   AdministrationIndexRoute,
   PhotosIndexRoute,
+  AdministrationCategoriesCreateRoute,
   AdministrationUsersCreateRoute,
+  AdministrationCategoriesIndexRoute,
   AdministrationUsersIndexRoute,
+  AdministrationCategoriesIdDeleteRoute,
+  AdministrationCategoriesIdUpdateRoute,
   AdministrationUsersIdDeleteRoute,
   AdministrationUsersIdUpdateRoute,
 })
@@ -257,8 +317,12 @@ export const routeTree = rootRoute.addChildren({
         "/photos/upload",
         "/administration/",
         "/photos/",
+        "/administration/categories/create",
         "/administration/users/create",
+        "/administration/categories/",
         "/administration/users/",
+        "/administration/categories/$id/delete",
+        "/administration/categories/$id/update",
         "/administration/users/$id/delete",
         "/administration/users/$id/update"
       ]
@@ -296,11 +360,23 @@ export const routeTree = rootRoute.addChildren({
     "/photos/": {
       "filePath": "photos/index.tsx"
     },
+    "/administration/categories/create": {
+      "filePath": "administration/categories/create.tsx"
+    },
     "/administration/users/create": {
       "filePath": "administration/users/create.tsx"
     },
+    "/administration/categories/": {
+      "filePath": "administration/categories/index.tsx"
+    },
     "/administration/users/": {
       "filePath": "administration/users/index.tsx"
+    },
+    "/administration/categories/$id/delete": {
+      "filePath": "administration/categories/$id.delete.tsx"
+    },
+    "/administration/categories/$id/update": {
+      "filePath": "administration/categories/$id.update.tsx"
     },
     "/administration/users/$id/delete": {
       "filePath": "administration/users/$id.delete.tsx"
