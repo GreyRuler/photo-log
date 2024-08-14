@@ -19,7 +19,7 @@ export default function Form({onSubmit}: Props) {
                 name="name"
                 render={({field}) => (
                     <FormItem>
-                        <FormLabel>Имя</FormLabel>
+                        <FormLabel>Наименование для папки</FormLabel>
                         <FormControl>
                             <Input {...field} className="border-slate-900"/>
                         </FormControl>

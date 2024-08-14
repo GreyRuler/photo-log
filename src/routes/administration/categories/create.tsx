@@ -25,7 +25,7 @@ function CategoryCreate() {
     }
 
     return (
-        <Page title="Форма создания пользователя">
+        <Page title="Форма создания категории">
             <FormProvider {...form}>
                 <Form onSubmit={onSubmit}/>
             </FormProvider>

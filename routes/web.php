@@ -12,6 +12,11 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('/images/{path}', function ($path) {
+    return Storage::get(urldecode($path));
+});
 
 Route::get('/{path?}', function () {
     return view('root');

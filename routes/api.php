@@ -3,10 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\SheetController;
 use App\Http\Controllers\UserController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,11 +21,6 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-
-Route::get('images/{name}', function ($name) {
-    return Storage::get("images/$name");
-});
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('users', UserController::class);
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
@@ -34,6 +29,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/photo/upload', [PhotoController::class, 'upload']);
+    Route::get('/photos', [PhotoController::class, 'all']);
+    Route::get('/photos/category', [PhotoController::class, 'allByCategory']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

@@ -92,7 +92,7 @@ function Login() {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input className="h-12 rounded-[12px] text-base" placeholder="Логин" {...field} />
+                                            <Input className="h-12 text-base" placeholder="Логин" {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -104,13 +104,13 @@ function Login() {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input className="h-12 rounded-[12px] text-base" placeholder="Пароль" type="password" {...field} />
+                                            <Input className="h-12 text-base" placeholder="Пароль" type="password" {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="h-12 rounded-[12px] text-base">{isLoggingIn ? 'Loading...' : 'Войти'}</Button>
+                            <Button type="submit" className="h-12 text-base">{isLoggingIn ? 'Loading...' : 'Войти'}</Button>
                         </fieldset>
                     </form>
                 </Form>

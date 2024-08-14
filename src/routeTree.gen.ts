@@ -18,6 +18,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as PhotosIndexImport } from './routes/photos/index'
 import { Route as AdministrationIndexImport } from './routes/administration/index'
 import { Route as PhotosUploadImport } from './routes/photos/upload'
+import { Route as PhotosCategoryImport } from './routes/photos/category'
 import { Route as DetailsIdImport } from './routes/details.$id'
 import { Route as AdministrationTableImport } from './routes/administration/table'
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
@@ -69,6 +70,11 @@ const AdministrationIndexRoute = AdministrationIndexImport.update({
 
 const PhotosUploadRoute = PhotosUploadImport.update({
   path: '/photos/upload',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PhotosCategoryRoute = PhotosCategoryImport.update({
+  path: '/photos/category',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -222,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DetailsIdImport
       parentRoute: typeof rootRoute
     }
+    '/photos/category': {
+      id: '/photos/category'
+      path: '/photos/category'
+      fullPath: '/photos/category'
+      preLoaderRoute: typeof PhotosCategoryImport
+      parentRoute: typeof rootRoute
+    }
     '/photos/upload': {
       id: '/photos/upload'
       path: '/photos/upload'
@@ -341,6 +354,7 @@ export const routeTree = rootRoute.addChildren({
   AdministrationPhotosRoute,
   AdministrationTableRoute,
   DetailsIdRoute,
+  PhotosCategoryRoute,
   PhotosUploadRoute,
   AdministrationIndexRoute,
   PhotosIndexRoute,
@@ -374,6 +388,7 @@ export const routeTree = rootRoute.addChildren({
         "/administration/photos",
         "/administration/table",
         "/details/$id",
+        "/photos/category",
         "/photos/upload",
         "/administration/",
         "/photos/",
@@ -414,6 +429,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/details/$id": {
       "filePath": "details.$id.tsx"
+    },
+    "/photos/category": {
+      "filePath": "photos/category.tsx"
     },
     "/photos/upload": {
       "filePath": "photos/upload.tsx"

@@ -65,9 +65,9 @@ class RecordController extends Controller
         $increment = $this->recordService->increment($record);
 
         $path = $this->photoService->save($record, $file, $increment);
-        $date = $this->dateFromMetadata($path);
+        $date = $this->photoService->dateFromMetadata($path);
         $location = $record->location;
-        $this->annotateImage($path, $date, $location);
+        $this->photoService->annotateImage($path, $date, $location);
         $this->recordService->update($record, $path, $increment, $count);
         return $record;
     }
