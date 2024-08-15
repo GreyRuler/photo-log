@@ -56,7 +56,7 @@ class SheetService
     public function saveDataToJson(Collection $data)
     {
         $json = $data->toJson();
-        Storage::put('data.json', $json);
+        Storage::disk('local')->put('data.json', $json);
     }
 
     public function updateOrCreateRecords(Collection $data)

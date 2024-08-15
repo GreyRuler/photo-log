@@ -38,6 +38,6 @@ class SheetController extends Controller
 
     public function data()
     {
-        return response()->json(Storage::json('data.json'));
+        return response()->json(Storage::disk('local')->json('data.json'));
     }
 }
