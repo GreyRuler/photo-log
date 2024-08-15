@@ -10,9 +10,12 @@ import {
 } from "../components/ui/drawer";
 import React from "react";
 import {CustomLinkProps} from "@/routes/administration";
+import {NotifyContext, useNotify} from "@/context/notifications.tsx";
+import {Notify} from "@/components/ui/notify.tsx";
 
 interface MyRouterContext {
     auth: AuthContext
+    notify: NotifyContext
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -31,6 +34,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function AuthLayout() {
     const auth = useAuth()
+    const {isView} = useNotify()
 
     return (
         <div className="text-white h-dvh overflow-hidden flex flex-col">
@@ -74,8 +78,10 @@ function AuthLayout() {
                             <DrawerDescription>{auth.user?.name}</DrawerDescription>
                         </DrawerHeader>
                         <div className="grid grid-cols-2 gap-4 p-4">
-                            <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}
-                                          to="/"/>
+                            <Notify isView={isView}>
+                                <DrawerButton title="Уведомления" icon={<Bell width="24" height="24"/>}
+                                              to="/notifications"/>
+                            </Notify>
                             <DrawerButton title="Выйти" icon={<LogOut width="24" height="24"/>}
                                           to="/logout" preload={false}/>
                             <DrawerButton title="Панель администратора" icon={<BookA width="24" height="24"/>}

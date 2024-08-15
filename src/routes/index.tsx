@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {Record, TExpense} from "@/api/Record.ts";
+import {TExpense} from "@/api/Record.ts";
 import {ColumnDef} from "@tanstack/react-table";
 import {DataTable} from "@/components/ui/data-table";
 import {Search, Triangle} from "lucide-react";
@@ -7,9 +7,10 @@ import {Fragment} from "react";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {cn} from "@/lib/utils.ts";
+import Sheet from "@/api/Sheet.ts";
 
 export const Route = createFileRoute('/')({
-    loader: () => Record.list<TExpense>(),
+    loader: () => Sheet.data(),
     component: IndexLayout,
 })
 

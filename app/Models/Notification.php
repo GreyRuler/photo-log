@@ -12,6 +12,7 @@ class Notification extends Model
     protected $fillable = [
         'title',
         'content',
+        'date',
     ];
 
     public $timestamps = false;

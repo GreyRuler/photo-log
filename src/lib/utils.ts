@@ -1,7 +1,8 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import {TUser} from "@/api/User.ts";
-import {ACCESS_USER_KEY} from "@/config.ts";
+import {ACCESS_USER_KEY, NOTIFICATIONS_KEY} from "@/config.ts";
+import {TNotification} from "@/api/Notification.ts";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -23,4 +24,14 @@ export function setStoredUser(user: TUser | null) {
     } else {
         localStorage.removeItem(ACCESS_USER_KEY)
     }
+}
+
+export function getStoredNotifications() {
+    const notifications = localStorage.getItem(NOTIFICATIONS_KEY)
+    if (!notifications) return []
+    return JSON.parse(notifications) ?? [] as TNotification[]
+}
+
+export function setStoredNotifications(notifications: TNotification[]) {
+    localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications))
 }

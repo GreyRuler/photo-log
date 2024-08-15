@@ -6,6 +6,7 @@ use App\Services\SheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class SheetController extends Controller
 {
@@ -33,5 +34,10 @@ class SheetController extends Controller
         } else {
             return response()->json(['status' => 'error', 'message' => $response->reason()], 500);
         }
+    }
+
+    public function data()
+    {
+        return response()->json(Storage::json('data.json'));
     }
 }

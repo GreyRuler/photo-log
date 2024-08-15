@@ -23,7 +23,6 @@ function Category() {
         })
     }, [promise])
 
-
     return (
         <div className="h-full overflow-auto space-y-6">
             {images.map((image) => <img src={`/images/${encodeURIComponent(encodeURIComponent(image))}`} />)}

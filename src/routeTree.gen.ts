@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as NotificationsImport } from './routes/notifications'
 import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as FavoritesImport } from './routes/favorites'
@@ -37,6 +38,11 @@ import { Route as AdministrationCategoriesIdUpdateImport } from './routes/admini
 import { Route as AdministrationCategoriesIdDeleteImport } from './routes/administration/categories/$id.delete'
 
 // Create/Update Routes
+
+const NotificationsRoute = NotificationsImport.update({
+  path: '/notifications',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LogoutRoute = LogoutImport.update({
   path: '/logout',
@@ -200,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogoutImport
       parentRoute: typeof rootRoute
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsImport
+      parentRoute: typeof rootRoute
+    }
     '/administration/favorites': {
       id: '/administration/favorites'
       path: '/administration/favorites'
@@ -350,6 +363,7 @@ export const routeTree = rootRoute.addChildren({
   FavoritesRoute,
   LoginRoute,
   LogoutRoute,
+  NotificationsRoute,
   AdministrationFavoritesRoute,
   AdministrationPhotosRoute,
   AdministrationTableRoute,
@@ -384,6 +398,7 @@ export const routeTree = rootRoute.addChildren({
         "/favorites",
         "/login",
         "/logout",
+        "/notifications",
         "/administration/favorites",
         "/administration/photos",
         "/administration/table",
@@ -417,6 +432,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/logout": {
       "filePath": "logout.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.tsx"
     },
     "/administration/favorites": {
       "filePath": "administration/favorites.tsx"

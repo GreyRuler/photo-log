@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use DateTime;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -12,7 +13,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return Notification::all();
+        return Notification::orderBy('id', 'desc')->get();
     }
 
     /**
@@ -20,7 +21,11 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        return Notification::create($request->all());
+        $date = new DateTime();
+        return Notification::create([
+            ...$request->all(),
+            'date' => $date->format('d.m.Y H:i'),
+        ]);
     }
 
     /**

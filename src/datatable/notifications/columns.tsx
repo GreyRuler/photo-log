@@ -1,8 +1,8 @@
 import {ColumnDef} from "@tanstack/react-table";
 import {createColumnActions} from "@/datatable/columnActions.tsx";
-import {TCategory} from "@/api/Category.ts";
+import {TNotification} from "@/api/Notification.ts";
 
-export const columns: ColumnDef<TCategory>[] = [
+export const columns: ColumnDef<TNotification>[] = [
     {
         accessorKey: "id",
         header: "id",

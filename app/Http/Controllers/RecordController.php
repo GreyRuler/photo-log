@@ -7,7 +7,6 @@ use App\Models\Record;
 use App\Services\PhotoService;
 use App\Services\RecordService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class RecordController extends Controller
 {
@@ -23,7 +22,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        return response()->json(Storage::json('data.json'));
+        return RecordResource::collection(Record::all());
     }
 
     /**

@@ -8,7 +8,6 @@ use App\Http\Controllers\RecordController;
 use App\Http\Controllers\SheetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('users', UserController::class);
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
+    Route::get('/sheet/data', [SheetController::class, 'data']);
     Route::apiResource('records', RecordController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('notifications', NotificationController::class);

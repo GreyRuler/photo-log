@@ -7,6 +7,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import {AuthProvider, useAuth} from "./context/auth";
+import {NotifyProvider} from "@/context/notifications.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -14,6 +15,7 @@ const router = createRouter({
     defaultPreload: 'intent',
     context: {
         auth: undefined!,
+        notify: undefined!,
     }
 })
 
@@ -32,7 +34,9 @@ function InnerApp() {
 function App() {
     return (
         <AuthProvider>
-            <InnerApp />
+            <NotifyProvider>
+                <InnerApp />
+            </NotifyProvider>
         </AuthProvider>
     )
 }

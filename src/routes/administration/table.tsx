@@ -6,7 +6,7 @@ import {Form, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import axiosClient from "@/api/axios-client.ts";
+import Sheet from "@/api/Sheet.ts";
 
 export const Route = createFileRoute('/administration/table')({
     component: AdministrationTable
@@ -27,7 +27,7 @@ function AdministrationTable() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await axiosClient.post('/sheet/collect', values)
+        const response = Sheet.collect(values.url)
         console.log(response)
     }
 
