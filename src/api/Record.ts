@@ -1,6 +1,6 @@
 import axiosClient from "@/api/axios-client.ts";
 import {z} from "zod";
-import {formSchema} from "@/form/record/formShema.ts";
+import {formSchema} from "@/form/record/formSchema.ts";
 import Entity from "@/api/Entity.ts";
 
 export type TExpense = {

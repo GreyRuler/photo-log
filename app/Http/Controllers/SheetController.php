@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use App\Services\SheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,16 +11,15 @@ use Illuminate\Support\Facades\Storage;
 
 class SheetController extends Controller
 {
-    private string $apiSheetURL = "https://sheetdb.io/api/v1/";
-
     public function __construct(private readonly SheetService $sheetService)
     {
     }
 
     public function collect(Request $request): JsonResponse
     {
-        $url = $request->input('url');
-        $response = Http::withOptions(['verify' => false])->get($this->apiSheetURL . $url, [
+        $sheet_api = $request->input('sheet_api');
+        Setting::setSheetApi($sheet_api);
+        $response = Http::withOptions(['verify' => false])->get($sheet_api, [
             'offset' => 1,
             'cast_numbers' => 'count,k,innerCount'
         ]);

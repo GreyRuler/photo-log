@@ -1,4 +1,5 @@
 import axiosClient from "@/api/axios-client.ts";
+import {FormSchemaPhoto} from "@/form/photos/formSchema.ts";
 
 export default class Photo {
     static async all() {
@@ -10,6 +11,11 @@ export default class Photo {
         const {data} = await axiosClient.get<string[]>('/photos/category', {
             params: new URLSearchParams({category})
         })
+        return data
+    }
+
+    static async upload(formData: FormSchemaPhoto) {
+        const {data} = await axiosClient.postForm('/photos/upload', formData)
         return data
     }
 }

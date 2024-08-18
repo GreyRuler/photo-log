@@ -4,7 +4,10 @@ import {Switch} from "@/components/ui/switch.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {SubmitHandler, useFormContext} from "react-hook-form";
 import {z} from "zod";
-import {formSchema} from "@/form/user/formShema.ts";
+import {formSchema} from "@/form/user/formSchema.ts";
+import {Undo2} from "lucide-react";
+import {Route} from "@/routes/administration/users";
+import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 
 type Props = {
     onSubmit: SubmitHandler<z.infer<typeof formSchema>>
@@ -12,6 +15,7 @@ type Props = {
 
 export default function Form({onSubmit}: Props) {
     const form = useFormContext<z.infer<typeof formSchema>>()
+    const navigate = Route.useNavigate()
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -71,7 +75,10 @@ export default function Form({onSubmit}: Props) {
                     </FormItem>
                 )}
             />
-            <Button type="submit">Отправить</Button>
+            <footer className="flex justify-between gap-6">
+                <ButtonSubmit/>
+                <Button type="button" onClick={() => navigate({to: "/administration/users"})}><Undo2 /></Button>
+            </footer>
         </form>
     )
 }

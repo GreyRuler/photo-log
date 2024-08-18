@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SignupRequest;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 
@@ -19,7 +20,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SignupRequest $request)
+    public function store(CreateUserRequest $request)
     {
         $data = $request->validated();
         /** @ User $user */
@@ -27,7 +28,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
-            'isAdmin' => $data['isAdmin'] === 'true',
+            'isAdmin' => $data['isAdmin'],
         ]);
 
         return response()->json($user);
@@ -44,7 +45,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(SignupRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
 
@@ -52,7 +53,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
-            'isAdmin' => $data['isAdmin'] === 'true',
+            'isAdmin' => $data['isAdmin'],
         ]);
     }
 

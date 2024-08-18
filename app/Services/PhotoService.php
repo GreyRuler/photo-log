@@ -18,8 +18,8 @@ class PhotoService
         $extension = $file->getClientOriginalExtension();
         $filename = $record->id . '_' . $increment . '.' . $extension;
         $filePath = '/records' . $record->folder . '/' . $filename;
-        Storage::put($filePath, file_get_contents($file));
-        return Storage::path($filePath);
+        Storage::disk('local')->put($filePath, file_get_contents($file));
+        return Storage::disk('local')->path($filePath);
     }
 
     public function annotateImage($path, $date, $location)

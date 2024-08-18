@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {useForm} from "react-hook-form";
 import {z} from "zod";
-import {formSchema} from "@/form/notification/formShema.ts";
+import {formSchema} from "@/form/notification/formSchema.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Notification, {TNotification} from "@/api/Notification.ts";
 import Page from "@/form/Page.tsx";
@@ -15,18 +15,20 @@ export const Route = createFileRoute('/administration/notifications/$id/update')
 
 function Update() {
     const data = Route.useLoaderData()
+    const navigate = Route.useNavigate()
     const {id} = Route.useParams()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: data,
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        Notification.update(id, values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        await Notification.update(id, values)
+        await navigate({to: "/administration/notifications"})
     }
 
     return (
-        <Page title="Форма обновления категории">
+        <Page title="Форма обновления уведомления">
             <FormProvider {...form}>
                 <Form onSubmit={onSubmit}/>
             </FormProvider>

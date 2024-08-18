@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use App\Services\PhotoService;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class PhotoController extends Controller
     public function upload(Request $request) {
         try {
             $category = $request->input('category');
-            $location = $request->input('location');
+            $location = Setting::getEventLocation();
             $file = $request->file('file')[0];
             $extension = $file->getClientOriginalExtension();
             $filePath = "/common/" . $category . "/" . time() . "." . $extension;

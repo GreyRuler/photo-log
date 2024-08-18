@@ -1,4 +1,4 @@
-import {createFileRoute} from '@tanstack/react-router'
+import {createFileRoute, useRouter} from '@tanstack/react-router'
 import {Record, TExpense} from "@/api/Record.ts";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
@@ -14,10 +14,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
-import {Camera} from "lucide-react";
-import {Fragment, useState} from "react";
-import {cn} from "@/lib/utils.ts";
-import {formSchema} from "@/form/record/formShema.ts";
+import {Minus, Plus} from "lucide-react";
+import {formSchema} from "@/form/record/formSchema.ts";
+import {useToast} from "@/components/ui/use-toast.ts";
+import {Slider} from "@/components/ui/slider.tsx";
+import {FileInput} from "@/form/FileInput.tsx";
+import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 
 export const Route = createFileRoute('/details/$id')({
     loader: ({params: {id}}) => Record.item<TExpense>(id),
@@ -26,36 +28,26 @@ export const Route = createFileRoute('/details/$id')({
 
 function Details() {
     const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment} = Route.useLoaderData()
-    const max = count * k - innerCount
+    const max = Math.ceil(count * k - innerCount)
+    const min = Number(max !== 0)
+    const {toast} = useToast()
+    const router = useRouter()
 
     const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
         resolver: zodResolver(formSchema(max)),
         defaultValues: {
-            count: 1,
+            count: min,
             file: undefined,
         },
     })
 
-    const [backgroundImage, setBackgroundImage] = useState<string | ArrayBuffer | null | undefined>(null);
-    const fileRef = form.register('file', {required: true})
-
-    function handleFileChange(fileList: FileList) {
-        const file = fileList[0];
-        if (!file) {
-            setBackgroundImage(null)
-            return
-        }
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setBackgroundImage(e.target?.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
-        Record.photo(id, formData)
+    async function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
+        await Record.photo(id, formData)
+        await router.invalidate()
+        form.reset()
+        toast({
+            description: "Фотография загружена",
+        })
     }
 
     return (
@@ -70,63 +62,55 @@ function Details() {
                 <p>Комментарий: <span className="text-emerald-500 font-bold">{comment}</span></p>
             </div>
             <div className="m-4 p-4 bg-slate-900">
-                <Form {...form}>
+                {!min ? "Все объекты загружены" : <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
                             name="count"
-                            render={({field}) => (
-                                <FormItem className="flex items-center gap-2 justify-between space-y-0">
-                                    <FormLabel className="text-base whitespace-nowrap">
-                                        Количество объектов на фото
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input className="text-right w-14 m-0 text-base" type="number" step="1" {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="file"
-                            render={({field}) => (
-                                <FormItem className="flex flex-col items-center gap-2 justify-between space-y-0">
-                                    <Button type="button" variant="secondary"
-                                            className="h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700"
-                                            style={{
-                                                backgroundImage: `url(${backgroundImage})`,
-                                                backgroundSize: "cover",
-                                                backgroundPosition: "center",
-                                                backgroundRepeat: "no-repeat",
-                                            }}
-                                    >
-                                        <FormLabel className={cn(
-                                            "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
-                                            field.value && "text-emerald-500"
-                                        )}>
-                                            {!!backgroundImage || (
-                                                <Fragment>
-                                                    <Camera width="24" height="24"/>
-                                                    <p className="font-bold">Загрузить фото</p>
-                                                </Fragment>
-                                            )}
-                                            <FormControl>
-                                                <Input {...fileRef} type="file" className="hidden" accept="image/*"
-                                                       onChange={(e) => {
-                                                           fileRef.onChange(e)
-                                                           e.target.files && handleFileChange(e.target.files)
-                                                       }}/>
-                                            </FormControl>
+                            render={({field}) => {
+                                return (
+                                    <FormItem className="flex flex-col items-center gap-2 justify-between">
+                                        <FormLabel className="text-base whitespace-nowrap">
+                                            Количество объектов на фото
                                         </FormLabel>
-                                    </Button>
-                                </FormItem>
-                            )}
+                                        <FormMessage/>
+                                        <div className="flex">
+                                            <Button type="button" disabled={field.value === min}
+                                                    className="p-2 bg-slate-800"
+                                                    onClick={() => form.setValue("count", --field.value)}>
+                                                <Minus/>
+                                            </Button>
+                                            <FormControl>
+                                                <Input className="text-center w-14 m-0 text-base border-none"
+                                                       type="number"
+                                                       step="1" {...field}/>
+                                            </FormControl>
+                                            <Button type="button" disabled={field.value === max}
+                                                    className="p-2 bg-slate-800"
+                                                    onClick={() => form.setValue("count", ++field.value)}>
+                                                <Plus/>
+                                            </Button>
+                                        </div>
+                                        <Slider
+                                            defaultValue={[min]}
+                                            value={[field.value]}
+                                            step={1}
+                                            min={min}
+                                            max={max}
+                                            onValueChange={(value) => form.setValue("count", value[0])}
+                                        />
+                                        <div className="w-full flex justify-between px-1.5">
+                                            <span className="text-muted-foreground">{min}</span>
+                                            <span className="text-muted-foreground">{max}</span>
+                                        </div>
+                                    </FormItem>
+                                )
+                            }}
                         />
-                        <Button type="submit" variant="default"
-                                className="font-bold text-emerald-500 w-full text-base border focus:bg-emerald-500 focus:text-white border-emerald-500">Отправить</Button>
+                        <FileInput/>
+                        <ButtonSubmit/>
                     </form>
-                </Form>
+                </Form>}
             </div>
         </div>
     )

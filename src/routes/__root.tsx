@@ -12,6 +12,8 @@ import React from "react";
 import {CustomLinkProps} from "@/routes/administration";
 import {NotifyContext, useNotify} from "@/context/notifications.tsx";
 import {Notify} from "@/components/ui/notify.tsx";
+import {Toaster} from "@/components/ui/toaster.tsx";
+import {cn} from "@/lib/utils.ts";
 
 interface MyRouterContext {
     auth: AuthContext
@@ -84,12 +86,17 @@ function AuthLayout() {
                             </Notify>
                             <DrawerButton title="Выйти" icon={<LogOut width="24" height="24"/>}
                                           to="/logout" preload={false}/>
-                            <DrawerButton title="Панель администратора" icon={<BookA width="24" height="24"/>}
-                                          to="/administration"/>
+                            {auth.user?.isAdmin && <DrawerButton
+                                title="Панель администратора"
+                                icon={<BookA width="24" height="24"/>}
+                                to="/administration"
+                                className="col-span-2"
+                            />}
                         </div>
                     </DrawerContent>
                 </Drawer>
             </footer>
+            <Toaster/>
         </div>
     )
 }
@@ -104,9 +111,12 @@ const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(({ic
     </Button>
 ));
 
-const DrawerButton = React.forwardRef<HTMLAnchorElement, CustomLinkProps>(({icon, title, ...props}, ref) => (
+const DrawerButton = React.forwardRef<HTMLAnchorElement, CustomLinkProps>(({icon, title, className, ...props}, ref) => (
     <DrawerClose asChild>
-        <Link ref={ref} className="h-20" {...props}>
+        <Link ref={ref} className={cn(
+            "h-20",
+            className
+        )} {...props}>
             <Button className="flex flex-col h-full w-full bg-slate-800">
                 {icon}
                 <span>{title}</span>

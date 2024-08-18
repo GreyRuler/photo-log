@@ -22,6 +22,7 @@ import { Route as PhotosUploadImport } from './routes/photos/upload'
 import { Route as PhotosCategoryImport } from './routes/photos/category'
 import { Route as DetailsIdImport } from './routes/details.$id'
 import { Route as AdministrationTableImport } from './routes/administration/table'
+import { Route as AdministrationSettingsImport } from './routes/administration/settings'
 import { Route as AdministrationPhotosImport } from './routes/administration/photos'
 import { Route as AdministrationFavoritesImport } from './routes/administration/favorites'
 import { Route as AdministrationUsersIndexImport } from './routes/administration/users/index'
@@ -91,6 +92,11 @@ const DetailsIdRoute = DetailsIdImport.update({
 
 const AdministrationTableRoute = AdministrationTableImport.update({
   path: '/administration/table',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdministrationSettingsRoute = AdministrationSettingsImport.update({
+  path: '/administration/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -225,6 +231,13 @@ declare module '@tanstack/react-router' {
       path: '/administration/photos'
       fullPath: '/administration/photos'
       preLoaderRoute: typeof AdministrationPhotosImport
+      parentRoute: typeof rootRoute
+    }
+    '/administration/settings': {
+      id: '/administration/settings'
+      path: '/administration/settings'
+      fullPath: '/administration/settings'
+      preLoaderRoute: typeof AdministrationSettingsImport
       parentRoute: typeof rootRoute
     }
     '/administration/table': {
@@ -366,6 +379,7 @@ export const routeTree = rootRoute.addChildren({
   NotificationsRoute,
   AdministrationFavoritesRoute,
   AdministrationPhotosRoute,
+  AdministrationSettingsRoute,
   AdministrationTableRoute,
   DetailsIdRoute,
   PhotosCategoryRoute,
@@ -401,6 +415,7 @@ export const routeTree = rootRoute.addChildren({
         "/notifications",
         "/administration/favorites",
         "/administration/photos",
+        "/administration/settings",
         "/administration/table",
         "/details/$id",
         "/photos/category",
@@ -441,6 +456,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/administration/photos": {
       "filePath": "administration/photos.tsx"
+    },
+    "/administration/settings": {
+      "filePath": "administration/settings.tsx"
     },
     "/administration/table": {
       "filePath": "administration/table.tsx"

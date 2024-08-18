@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SheetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,9 +30,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/photo/upload', [PhotoController::class, 'upload']);
+    Route::post('/photos/upload', [PhotoController::class, 'upload']);
     Route::get('/photos', [PhotoController::class, 'all']);
     Route::get('/photos/category', [PhotoController::class, 'allByCategory']);
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::post('/settings/update', [SettingsController::class, 'update']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {useForm} from "react-hook-form";
 import {z} from "zod";
-import {formSchema} from "@/form/category/formShema.ts";
+import {formSchema} from "@/form/category/formSchema.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form as FormProvider} from "@/components/ui/form.tsx";
 import Form from "@/form/category/Form.tsx";
@@ -15,14 +15,16 @@ export const Route = createFileRoute('/administration/categories/$id/update')({
 
 function CategoriesUpdate() {
     const data = Route.useLoaderData()
+    const navigate = Route.useNavigate()
     const {id} = Route.useParams()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: data,
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        Category.update(id, values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        await Category.update(id, values)
+        await navigate({to: "/administration/categories"})
     }
 
     return (

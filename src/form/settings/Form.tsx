@@ -1,29 +1,38 @@
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Button} from "@/components/ui/button.tsx";
 import {SubmitHandler, useFormContext} from "react-hook-form";
-import {z} from "zod";
-import {formSchema} from "@/form/category/formSchema.ts";
-import {Undo2} from "lucide-react";
-import {Route} from "@/routes/administration/categories";
+import {SettingsSchema} from "@/form/settings/formSchema.ts";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 
 type Props = {
-    onSubmit: SubmitHandler<z.infer<typeof formSchema>>
+    onSubmit: SubmitHandler<SettingsSchema>
 }
 
 export default function Form({onSubmit}: Props) {
-    const navigate = Route.useNavigate()
-    const form = useFormContext<z.infer<typeof formSchema>>()
+    const form = useFormContext<SettingsSchema>()
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
                 control={form.control}
-                name="name"
+                name="event_name"
                 render={({field}) => (
                     <FormItem>
-                        <FormLabel>Наименование для папки</FormLabel>
+                        <FormLabel>Наименование мероприятия</FormLabel>
+                        <FormControl>
+                            <Input {...field} className="border-slate-900"/>
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="event_location"
+                render={({field}) => (
+                    <FormItem>
+                        <FormLabel>Локация мероприятия</FormLabel>
                         <FormControl>
                             <Input {...field} className="border-slate-900"/>
                         </FormControl>
@@ -31,10 +40,7 @@ export default function Form({onSubmit}: Props) {
                     </FormItem>
                 )}
             />
-            <footer className="flex justify-between gap-6">
-                <ButtonSubmit/>
-                <Button type="button" onClick={() => navigate({to: "/administration/categories"})}><Undo2/></Button>
-            </footer>
+            <ButtonSubmit/>
         </form>
     )
 }
