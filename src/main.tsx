@@ -9,6 +9,10 @@ import { routeTree } from './routeTree.gen'
 import {AuthProvider, useAuth} from "./context/auth";
 import {NotifyProvider} from "@/context/notifications.tsx";
 
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW()
+
 // Create a new router instance
 const router = createRouter({
     routeTree,
