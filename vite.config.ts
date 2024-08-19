@@ -64,7 +64,7 @@ export default defineConfig({
 
             // Use 'prompt' for new versions of the PWA. 'autoUpdate' is
             // simpler but may as well dmeo how this works.
-            registerType: 'prompt',
+            registerType: 'autoUpdate',
 
             // Do not use the PWA with dev builds.
             devOptions: {
@@ -132,8 +132,8 @@ export default defineConfig({
                 name: 'Laravel Vite PWA',
                 short_name: 'laravel-vite-pwa',
                 description: 'A demo of Laravel with vite-plugin-pwa',
-                theme_color: '#DE9918',
-                background_color: '#DE9918',
+                theme_color: '#0f172a',
+                background_color: '#0f172a',
                 orientation: 'portrait',
                 display: 'standalone',
                 scope: '/',
