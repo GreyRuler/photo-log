@@ -43,7 +43,6 @@ const publicIcons: Icons[] = [
 const additionalImages: Icons[] = []
 
 export default defineConfig({
-    base: '/',
     plugins: [
         laravel({
             input: 'src/main.tsx',
