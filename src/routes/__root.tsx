@@ -86,7 +86,7 @@ function AuthLayout() {
                             </Notify>
                             <DrawerButton title="Выйти" icon={<LogOut width="24" height="24"/>}
                                           to="/logout" preload={false}/>
-                            {!auth.user?.isAdmin && <DrawerButton
+                            {auth.user?.isAdmin && <DrawerButton
                                 title="Панель администратора"
                                 icon={<BookA width="24" height="24"/>}
                                 to="/administration"
