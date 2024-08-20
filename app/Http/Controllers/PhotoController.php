@@ -26,19 +26,23 @@ class PhotoController extends Controller
     }
 
     public function upload(Request $request) {
-        try {
-            $category = $request->input('category');
-            $location = Setting::getEventLocation();
-            $file = $request->file('file')[0];
-            $extension = $file->getClientOriginalExtension();
-            $filePath = "/common/" . $category . "/" . time() . "." . $extension;
-            Storage::put($filePath, file_get_contents($file));
-            $path = Storage::path($filePath);
-            $date = $this->photoService->dateFromMetadata($path);
-            $this->photoService->annotateImage($path, $date, $location);
-            return "Фото загружено";
-        } catch (Exception $e) {
-            return $e;
-        }
+        $file = $request->file('file')[0];
+        $extension = $file->getClientOriginalExtension();
+        $filePath = "/common/" .  time() . "." . $extension;
+        return Storage::put($filePath, file_get_contents($file));
+//        try {
+//            $category = $request->input('category');
+//            $location = Setting::getEventLocation();
+//            $file = $request->file('file')[0];
+//            $extension = $file->getClientOriginalExtension();
+//            $filePath = "/common/" . $category . "/" . time() . "." . $extension;
+//            Storage::disk('local')->put($filePath, file_get_contents($file));
+//            $path = Storage::disk('local')->path($filePath);
+//            $date = $this->photoService->dateFromMetadata($path);
+//            $this->photoService->annotateImage($path, $date, $location);
+//            return "Фото загружено";
+//        } catch (Exception $e) {
+//            return $e;
+//        }
     }
 }

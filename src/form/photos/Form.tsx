@@ -17,7 +17,7 @@ export function Form({categories, onSubmit}: Props) {
     const form = useFormContext<FormSchemaPhoto>()
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="m-auto space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full m-auto space-y-6">
             <FormField
                 control={form.control}
                 name="category"

@@ -5,7 +5,6 @@ import React from "react";
 
 export const Route = createFileRoute('/administration/')({
     beforeLoad: ({context, location}) => {
-        console.log(context.auth.user?.isAdmin)
         if (!context.auth.user?.isAdmin) {
             throw redirect({
                 to: '/',
