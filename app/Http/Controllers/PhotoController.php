@@ -31,6 +31,7 @@ class PhotoController extends Controller
         $extension = $file->getClientOriginalExtension();
         $filePath = "/common/" .  time() . "." . $extension;
         Log::info($filePath);
+        Log::info(Storage::put($filePath, file_get_contents($file)));
         return Storage::put($filePath, file_get_contents($file));
 //        try {
 //            $category = $request->input('category');
