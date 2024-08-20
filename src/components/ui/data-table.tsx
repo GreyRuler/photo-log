@@ -27,7 +27,7 @@ export function DataTable(
     {columns, data}: DataTableProps<TExpense>
 ) {
     const navigate = Route.useNavigate()
-    const [expanded, setExpanded] = useState<ExpandedState>({});
+    const [expanded, setExpanded] = useState<ExpandedState>({0:true});
 
     const table = useReactTable({
         data,
