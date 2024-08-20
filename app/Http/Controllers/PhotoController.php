@@ -6,6 +6,7 @@ use App\Models\Setting;
 use App\Services\PhotoService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
@@ -29,6 +30,7 @@ class PhotoController extends Controller
         $file = $request->file('file')[0];
         $extension = $file->getClientOriginalExtension();
         $filePath = "/common/" .  time() . "." . $extension;
+        Log::info($filePath);
         return Storage::put($filePath, file_get_contents($file));
 //        try {
 //            $category = $request->input('category');
