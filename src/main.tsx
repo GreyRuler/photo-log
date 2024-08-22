@@ -10,8 +10,6 @@ import {AuthProvider, useAuth} from "./context/auth";
 import {NotifyProvider, useNotify} from "@/context/notifications.tsx";
 import {SettingsProvider, useSettings} from "@/context/settings.tsx";
 
-// import { registerSW } from 'virtual:pwa-register'
-
 // Create a new router instance
 const router = createRouter({
     routeTree,
@@ -58,5 +56,4 @@ if (!rootElement.innerHTML) {
             <App/>
         </StrictMode>,
     )
-    // registerSW()
 }
