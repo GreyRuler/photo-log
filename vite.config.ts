@@ -129,8 +129,8 @@ export default defineConfig({
             // Manifest settings - these will appear in the generated manifest.webmanifest
             manifest: {
                 // Metadata
-                name: 'Vinchi Photo',
-                short_name: 'Vinchi Photo',
+                name: 'Vinci Photo',
+                short_name: 'Vinci Photo',
                 description: 'Это приложение позволит автоматизировать и упростить процесс документирования и контроля мероприятий, предоставляя администратору и фотографам мощный инструмент для эффективной работы.',
                 theme_color: '#0f172a',
                 background_color: '#0f172a',
