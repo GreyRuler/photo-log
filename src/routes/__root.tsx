@@ -61,7 +61,7 @@ function AuthLayout() {
             <main className="flex-1 bg-slate-800 overflow-hidden">
                 <Outlet/>
             </main>
-            <footer className="flex justify-center p-2 gap-8 bg-primary">
+            {auth.isAuthenticated && <footer className="flex justify-center p-2 gap-8 bg-primary">
                 <Link to="/" activeProps={{ className: "group" }}>
                     <ActionButton icon={<Table2
                         width="24" height="24"
@@ -134,7 +134,7 @@ function AuthLayout() {
                         </div>
                     </DrawerContent>
                 </Drawer>
-            </footer>
+            </footer>}
             <Toaster/>
         </div>
     )
