@@ -15,6 +15,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "../components/ui/input";
 import {Button} from "../components/ui/button";
 import User from "../api/User";
+import logo from '@/assets/i/logo.svg';
 
 // eslint-disable-next-line ts/no-unnecessary-type-assertion
 const fallback = '/' as const
@@ -79,8 +80,9 @@ function Login() {
 
     return (
         <div className="grid min-h-full grid-cols-[minmax(0,320px)] grid-rows-[auto,auto,auto,1fr] grid-areas-[header_content_secondary_footer] content-start justify-center text-center">
+            <img src={logo} alt="logo" className="my-16"/>
             <header className="grid grid-gap-5 gap-5 justify-items-center mb-12">
-                <div className="font-medium text-xl leading-[7.5rem]">Вход в аккаунт</div>
+                <div className="font-medium text-xl">Вход в аккаунт</div>
             </header>
             <main>
                 <Form {...form}>
@@ -104,13 +106,15 @@ function Login() {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input className="h-12 text-base" placeholder="Пароль" type="password" {...field} />
+                                            <Input className="h-12 text-base" placeholder="Пароль"
+                                                   type="password" {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="h-12 text-base">{isLoggingIn ? 'Loading...' : 'Войти'}</Button>
+                            <Button type="submit"
+                                    className="h-12 text-base">{isLoggingIn ? 'Loading...' : 'Войти'}</Button>
                         </fieldset>
                     </form>
                 </Form>
