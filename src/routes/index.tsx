@@ -51,7 +51,7 @@ function IndexLayout() {
 
     return (
         <div className="h-full">
-            <DataTable columns={columns} data={data}/>
+            <DataTable columns={columns} data={data} pagination={false}/>
         </div>
     )
 }

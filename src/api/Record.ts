@@ -18,6 +18,8 @@ export type TExpense = {
     innerCount: number // "Счётчик сделанных фото"
     folder: string // "Родительский раздел"
     subRows?: TExpense[]
+    priority: number
+    stars: number
 }
 
 export class Record extends Entity {
@@ -25,6 +27,11 @@ export class Record extends Entity {
 
     static async photo(id: number, formData: z.infer<ReturnType<typeof formSchema>>) {
         const {data} = await axiosClient.postForm<TExpense>(`/records/${id}/photo`, formData)
+        return data
+    }
+
+    static async favorites() {
+        const {data} = await axiosClient.get<TExpense[]>(`/records/favorites`)
         return data
     }
 }

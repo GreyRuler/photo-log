@@ -1,23 +1,25 @@
 import './index.css'
 import './App.css'
-import { StrictMode } from 'react'
+import {StrictMode} from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import {RouterProvider, createRouter} from '@tanstack/react-router'
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
+import {routeTree} from './routeTree.gen'
 import {AuthProvider, useAuth} from "./context/auth";
-import {NotifyProvider} from "@/context/notifications.tsx";
+import {NotifyProvider, useNotify} from "@/context/notifications.tsx";
+import {SettingsProvider, useSettings} from "@/context/settings.tsx";
 
-import { registerSW } from 'virtual:pwa-register'
+// import { registerSW } from 'virtual:pwa-register'
 
 // Create a new router instance
 const router = createRouter({
     routeTree,
-    defaultPreload: 'intent',
+    defaultPreload: false,
     context: {
         auth: undefined!,
         notify: undefined!,
+        settings: undefined!,
     }
 })
 
@@ -30,16 +32,20 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
     const auth = useAuth()
-    return <RouterProvider router={router} context={{ auth }} />
+    const notify = useNotify()
+    const settings = useSettings()
+    return <RouterProvider router={router} context={{auth, notify, settings}}/>
 }
 
 function App() {
     return (
-        <AuthProvider>
-            <NotifyProvider>
-                <InnerApp />
-            </NotifyProvider>
-        </AuthProvider>
+        <SettingsProvider>
+            <AuthProvider>
+                <NotifyProvider>
+                    <InnerApp/>
+                </NotifyProvider>
+            </AuthProvider>
+        </SettingsProvider>
     )
 }
 
@@ -52,5 +58,5 @@ if (!rootElement.innerHTML) {
             <App/>
         </StrictMode>,
     )
-    registerSW()
+    // registerSW()
 }

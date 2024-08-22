@@ -27,7 +27,7 @@ export const Route = createFileRoute('/details/$id')({
 })
 
 function Details() {
-    const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment} = Route.useLoaderData()
+    const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location} = Route.useLoaderData()
     const max = Math.ceil(count * k - innerCount)
     const min = Number(max !== 0)
     const {toast} = useToast()
@@ -42,12 +42,18 @@ function Details() {
     })
 
     async function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
-        await Record.photo(id, formData)
-        await router.invalidate()
-        form.reset()
-        toast({
-            description: "Фотография загружена",
-        })
+        try {
+            await Record.photo(id, formData)
+            await router.invalidate()
+            form.reset()
+            toast({
+                description: "Фотография загружена",
+            })
+        } catch (e) {
+            toast({
+                description: "Фотография повреждена",
+            })
+        }
     }
 
     return (
@@ -107,7 +113,7 @@ function Details() {
                                 )
                             }}
                         />
-                        <FileInput/>
+                        <FileInput location={location}/>
                         <ButtonSubmit/>
                     </form>
                 </Form>}

@@ -8,7 +8,7 @@ import Form from "@/form/settings/Form.tsx";
 import Settings from "@/api/Settings"
 import {FormSheetSync} from "@/form/settings/FormSheetSync.tsx";
 import Sheet from "@/api/Sheet.ts";
-import {FormSchemaSheetSync} from "@/form/settings/formSchemaSheetSync.ts";
+import {formSchema as formSchemaSheetSync, FormSchemaSheetSync} from "@/form/settings/formSchemaSheetSync.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
 
 export const Route = createFileRoute('/administration/settings')({
@@ -19,6 +19,7 @@ export const Route = createFileRoute('/administration/settings')({
 function Index() {
     const { toast } = useToast();
     const data = Route.useLoaderData()
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: data
@@ -34,6 +35,11 @@ function Index() {
             })
     }
 
+    const formSheetSync = useForm({
+        resolver: zodResolver(formSchemaSheetSync),
+        defaultValues: data
+    })
+
     function onSubmitSheetSync({sheet_api}: FormSchemaSheetSync) {
         Sheet.collect(sheet_api)
             .then((response) => {
@@ -47,7 +53,7 @@ function Index() {
     return (
         <Page title="Настройки">
             <div className="space-y-8">
-                <FormProvider {...form}>
+                <FormProvider {...formSheetSync}>
                     <FormSheetSync onSubmit={onSubmitSheetSync}/>
                 </FormProvider>
                 <FormProvider {...form}>

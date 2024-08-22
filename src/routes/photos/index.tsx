@@ -1,29 +1,57 @@
-import {createFileRoute, Link} from '@tanstack/react-router'
+import {createFileRoute} from '@tanstack/react-router'
+import Category, {TCategory} from "@/api/Category.ts";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Form as FormProvider} from "@/components/ui/form.tsx";
+import {formSchema, FormSchemaPhoto} from "@/form/photos/formSchema.ts";
+import {Form} from "@/form/photos/Form.tsx";
+import {useToast} from "@/components/ui/use-toast.ts";
 import Photo from "@/api/Photo.ts";
+import {CategoriesNotFound} from "@/components/CategoriesNotFound.tsx";
+import {useSettings} from "@/context/settings.tsx";
 
 export const Route = createFileRoute('/photos/')({
-    loader: () => Photo.all(),
-    component: Index,
+    loader: () => Category.list<TCategory>(),
+    component: Upload
 })
 
-function Index() {
+function Upload() {
+    const {settings} = useSettings()
     const data = Route.useLoaderData()
+    const {toast} = useToast()
+    const categories = data.map((item) => item.name)
+
+    if (categories.length === 0) {
+        return <CategoriesNotFound/>
+    }
+
+    const form = useForm<FormSchemaPhoto>({
+        resolver: zodResolver(formSchema(categories)),
+        defaultValues: {
+            category: categories[0],
+            file: undefined
+        }
+    })
+
+    async function onSubmit(data: FormSchemaPhoto) {
+        try {
+            await Photo.upload(data)
+            form.reset()
+            toast({
+                description: "Фотография загружена",
+            })
+        } catch (e) {
+            toast({
+                description: "Фотография повреждена",
+            })
+        }
+    }
 
     return (
-        <div className="p-4 h-full overflow-auto">
-            <div className="space-y-4 flex flex-col">
-                {data.map((item) => (
-                    <Link
-                        className="text-base rounded-md bg-slate-700 p-4"
-                        to="/photos/category"
-                        search={{
-                            category: item
-                        }}
-                    >
-                        {item}
-                    </Link>
-                ))}
-            </div>
+        <div className="h-full overflow-auto flex p-8">
+            <FormProvider {...form}>
+                <Form categories={categories} location={settings?.event_location ?? ""} onSubmit={onSubmit}/>
+            </FormProvider>
         </div>
     )
 }

@@ -10,10 +10,11 @@ import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 
 type Props = {
     categories: string[]
+    location: string
     onSubmit: SubmitHandler<FormSchemaPhoto>
 };
 
-export function Form({categories, onSubmit}: Props) {
+export function Form({categories, location, onSubmit}: Props) {
     const form = useFormContext<FormSchemaPhoto>()
 
     return (
@@ -55,7 +56,7 @@ export function Form({categories, onSubmit}: Props) {
                     </FormItem>
                 )}
             />
-            <FileInput/>
+            <FileInput location={location}/>
             <ButtonSubmit/>
         </form>
     )

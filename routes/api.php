@@ -25,10 +25,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('users', UserController::class);
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
     Route::get('/sheet/data', [SheetController::class, 'data']);
+    Route::get('/records/favorites', [RecordController::class, 'favorites']);
+    Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::apiResource('records', RecordController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('notifications', NotificationController::class);
-    Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/photos/upload', [PhotoController::class, 'upload']);
     Route::get('/photos', [PhotoController::class, 'all']);

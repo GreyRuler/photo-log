@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('comment')->nullable(); // Комментарий
             $table->json('images')->default(json_encode([])); // картинки
             $table->text('folder'); // раздел
+            $table->integer('stars')->default(0);
             $table->timestamps(); // Поля created_at и updated_at
         });
     }

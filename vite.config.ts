@@ -3,7 +3,7 @@ import {defineConfig} from "vite";
 import laravel from 'laravel-vite-plugin';
 import viteReact from "@vitejs/plugin-react";
 import {TanStackRouterVite} from '@tanstack/router-plugin/vite'
-import {VitePWA} from "vite-plugin-pwa";
+// import {VitePWA} from "vite-plugin-pwa";
 
 type Icons = {
     src: string
@@ -50,7 +50,7 @@ export default defineConfig({
         }),
         viteReact(),
         TanStackRouterVite(),
-        VitePWA({
+        /*VitePWA({
             // Make the PWA plugin build to the same place as laravel/vite-plugin
             buildBase: '/build/',
 
@@ -85,7 +85,7 @@ export default defineConfig({
             workbox: {
                 // Add all the assets built by Vite into the public/build/assets
                 // folder to the SW cache.
-                globPatterns: ['**/*.{js,css,html,ico,jpg,png,svg,woff,woff2,ttf,eot}'],
+                globPatterns: ['**!/!*.{js,css,html,ico,jpg,png,svg,woff,woff2,ttf,eot}'],
 
                 // Define the root URL as the entrypoint for the offline app.
                 // vue-router can then takes over and shows the correct page
@@ -129,9 +129,9 @@ export default defineConfig({
             // Manifest settings - these will appear in the generated manifest.webmanifest
             manifest: {
                 // Metadata
-                name: 'Laravel Vite PWA',
-                short_name: 'laravel-vite-pwa',
-                description: 'A demo of Laravel with vite-plugin-pwa',
+                name: 'Vinchi Photo',
+                short_name: 'Vinchi Photo',
+                description: 'Это приложение позволит автоматизировать и упростить процесс документирования и контроля мероприятий, предоставляя администратору и фотографам мощный инструмент для эффективной работы.',
                 theme_color: '#0f172a',
                 background_color: '#0f172a',
                 orientation: 'portrait',
@@ -143,7 +143,7 @@ export default defineConfig({
                 // These icons are used when installing the PWA onto a home screen
                 icons: [...manifestIcons]
             }
-        }),
+        }),*/
     ],
     resolve: {
         alias: {

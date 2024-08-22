@@ -1,9 +1,15 @@
 import axiosClient from "@/api/axios-client.ts";
 import {SettingsSchema} from "@/form/settings/formSchema.ts";
 
+export type DSettings = {
+    sheet_api: string
+    event_location: string
+    event_name: string
+}
+
 export default class Settings {
     static async get() {
-        const {data} = await axiosClient.get('/settings')
+        const {data} = await axiosClient.get<DSettings>('/settings')
         return data
     }
 

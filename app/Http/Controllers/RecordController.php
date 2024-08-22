@@ -22,7 +22,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        return RecordResource::collection(Record::all());
+        return RecordResource::collection($this->recordService->getSortedRecordsByParams());
     }
 
     /**
@@ -46,7 +46,7 @@ class RecordController extends Controller
      */
     public function update(Request $request, Record $record)
     {
-        //
+        return $record->update($request->all());
     }
 
     /**
@@ -60,14 +60,16 @@ class RecordController extends Controller
     public function photo(Request $request, Record $record)
     {
         $count = $request->input('count');
-        $file = $request->file('file')[0];
+        $file = $request->file('file');
         $increment = $this->recordService->increment($record);
 
         $path = $this->photoService->save($record, $file, $increment);
-        $date = $this->photoService->dateFromMetadata($path);
-        $location = $record->location;
-        $this->photoService->annotateImage($path, $date, $location);
         $this->recordService->update($record, $path, $increment, $count);
         return $record;
+    }
+
+    public function favorites()
+    {
+        return RecordResource::collection($this->recordService->getSortedRecordsByStars());
     }
 }

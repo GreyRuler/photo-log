@@ -26,6 +26,8 @@ class RecordResource extends JsonResource
             'k' => $this->k,
             'location' => $this->location,
             'comment' => $this->comment,
+            'priority' => $this->priority,
+            'stars' => $this->stars,
         ];
     }
 }
