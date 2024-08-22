@@ -55,9 +55,9 @@ function AuthLayout() {
 
     return (
         <div className="text-white h-dvh overflow-hidden flex flex-col">
-            <header className="w-full bg-primary py-3">
+            {auth.isAuthenticated && <header className="w-full bg-primary py-3">
                 <h1 className="font-bold text-base text-center">{settings?.event_name}</h1>
-            </header>
+            </header>}
             <main className="flex-1 bg-slate-800 overflow-hidden">
                 <Outlet/>
             </main>
