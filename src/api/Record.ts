@@ -1,7 +1,6 @@
 import axiosClient from "@/api/axios-client.ts";
-import {z} from "zod";
-import {formSchema} from "@/form/record/formSchema.ts";
 import Entity from "@/api/Entity.ts";
+import {DRecordPhoto} from "@/api/RecordPhoto.ts";
 
 export type TExpense = {
     id: number
@@ -20,15 +19,11 @@ export type TExpense = {
     subRows?: TExpense[]
     priority: number
     stars: number
+    photos: DRecordPhoto[]
 }
 
 export class Record extends Entity {
     static URL = "/records"
-
-    static async photo(id: number, formData: z.infer<ReturnType<typeof formSchema>>) {
-        const {data} = await axiosClient.postForm<TExpense>(`/records/${id}/photo`, formData)
-        return data
-    }
 
     static async favorites() {
         const {data} = await axiosClient.get<TExpense[]>(`/records/favorites`)

@@ -14,7 +14,11 @@ class Record extends Model
     ];
 
     protected $casts = [
-        'images' => 'array',
         'k' => 'float',
     ];
+
+    public function photos()
+    {
+        return $this->hasMany(RecordPhoto::class);
+    }
 }

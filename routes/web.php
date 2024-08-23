@@ -11,12 +11,12 @@
 |
 */
 
+use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
-Route::get('/images/{path}', function ($path) {
-    return Storage::get(urldecode($path));
-});
+Route::get('/download/{path}', [FileController::class, 'download']);
+Route::get('/zip', [FileController::class, 'zip']);
+Route::get('/images/{path}', [FileController::class, 'image']);
 
 Route::get('/{path?}', function () {
     return view('root');

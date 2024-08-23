@@ -9,7 +9,7 @@ import {nanoid} from "nanoid";
 import {cn} from "@/lib/utils.ts";
 import {Record} from "@/api/Record.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
-import {Route} from "@/routes/administration/table.tsx";
+import {Route} from "@/routes/administration/table/index.tsx";
 
 type Props = {
     id: number
@@ -18,7 +18,6 @@ type Props = {
 
 export default function Form({id, stars}: Props) {
     const { toast } = useToast();
-    console.log(stars)
     const navigate = Route.useNavigate()
     const form = useForm<StarFormSchema>({
         resolver: zodResolver(formSchema),

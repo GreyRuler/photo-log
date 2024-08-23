@@ -49,8 +49,9 @@ function AuthLayout() {
     const matchRoute = useMatchRoute()
     const matchAdministration = matchRoute({to: '/administration', fuzzy: true})
     const matchNotifications = matchRoute({to: '/notifications', fuzzy: true})
-    const matchPhotos = matchRoute({to: '/photos'})
-    const matchPhotosAll = matchRoute({to: '/photos/all', fuzzy: true})
+    const matchCategoriesUpload = matchRoute({to: '/categories/upload'})
+    const matchCategories = matchRoute({to: '/categories', fuzzy: true})
+    const matchCategoriesId = matchRoute({to: '/categories/$id', fuzzy: true})
     const matchDetails = matchRoute({to: '/details/$id', fuzzy: true})
 
     return (
@@ -81,7 +82,7 @@ function AuthLayout() {
                     <DrawerTrigger asChild>
                         <ActionButton icon={<Camera
                             width="24" height="24"
-                            className={cn((matchPhotos || matchPhotosAll) && "stroke-purple-600")}
+                            className={cn((matchCategoriesUpload || matchCategories || matchCategoriesId) && "stroke-purple-600")}
                         />}/>
                     </DrawerTrigger>
                     <DrawerContent className="text-white bg-primary border-none">
@@ -92,12 +93,12 @@ function AuthLayout() {
                         <div className="grid grid-cols-2 gap-4 p-4">
                             <DrawerButton title="Загрузить" icon={<Upload
                                 width="24" height="24"
-                                className={cn(matchPhotos && "stroke-purple-600")}
-                            />} to="/photos"/>
+                                className={cn(matchCategoriesUpload && "stroke-purple-600")}
+                            />} to="/categories/upload"/>
                             <DrawerButton title="Просмотреть" icon={<EyeIcon
                                 width="24" height="24"
-                                className={cn(matchPhotosAll && "stroke-purple-600")}
-                            />} to="/photos/all"/>
+                                className={cn((matchCategories || matchCategoriesId) && !matchCategoriesUpload && "stroke-purple-600")}
+                            />} to="/categories"/>
                         </div>
                     </DrawerContent>
                 </Drawer>

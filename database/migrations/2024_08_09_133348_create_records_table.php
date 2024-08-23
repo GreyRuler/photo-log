@@ -17,14 +17,12 @@ return new class extends Migration
             $table->text('name'); // Название баннера
             $table->string('unit'); // Единица измерения
             $table->integer('count'); // Количество
-            $table->integer('innerCount')->default(0); // счетчик сфотографированного количества
             $table->text('timeArrival')->nullable(); // Время прибытия
             $table->text('timeEnd')->nullable(); // Время окончания
             $table->text('contractor')->nullable(); // Подрядчик (можно хранить как текст)
             $table->float('k'); // Коэффициент
             $table->string('location')->nullable(); // Локация
             $table->text('comment')->nullable(); // Комментарий
-            $table->json('images')->default(json_encode([])); // картинки
             $table->text('folder'); // раздел
             $table->integer('stars')->default(0);
             $table->timestamps(); // Поля created_at и updated_at

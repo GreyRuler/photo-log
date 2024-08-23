@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RecordResource;
 use App\Models\Record;
-use App\Services\PhotoService;
 use App\Services\RecordService;
 use Illuminate\Http\Request;
 
 class RecordController extends Controller
 {
     public function __construct(
-        private readonly PhotoService $photoService,
         private readonly RecordService $recordService,
     )
     {
@@ -55,17 +53,6 @@ class RecordController extends Controller
     public function destroy(Record $record)
     {
         //
-    }
-
-    public function photo(Request $request, Record $record)
-    {
-        $count = $request->input('count');
-        $file = $request->file('file');
-        $increment = $this->recordService->increment($record);
-
-        $path = $this->photoService->save($record, $file, $increment);
-        $this->recordService->update($record, $path, $increment, $count);
-        return $record;
     }
 
     public function favorites()

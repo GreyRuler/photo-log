@@ -48,10 +48,13 @@ export const columns: ColumnDef<TExpense>[] = [
 
 function IndexLayout() {
     const data = Route.useLoaderData()
+    const navigate = Route.useNavigate()
+
+    const onNavigate = (id: string) => navigate({to: '/details/$id', params: {id}})
 
     return (
         <div className="h-full">
-            <DataTable columns={columns} data={data} pagination={false}/>
+            <DataTable columns={columns} data={data} pagination={false} onRowNavigate={onNavigate}/>
         </div>
     )
 }

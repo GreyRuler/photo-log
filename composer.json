@@ -12,7 +12,8 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "league/flysystem-aws-s3-v3": "^3.28",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "ext-zip": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.9",

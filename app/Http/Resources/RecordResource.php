@@ -19,7 +19,7 @@ class RecordResource extends JsonResource
             'name' => $this->name,
             'unit' => $this->unit,
             'count' => $this->count,
-            'innerCount' => $this->innerCount,
+            'innerCount' => $this->photos()->sum('count'),
             'timeArrival' => $this->timeArrival,
             'timeEnd' => $this->timeEnd,
             'contractor' => $this->contractor,
@@ -28,6 +28,7 @@ class RecordResource extends JsonResource
             'comment' => $this->comment,
             'priority' => $this->priority,
             'stars' => $this->stars,
+            'photos' => RecordPhotoResource::collection($this->photos),
         ];
     }
 }

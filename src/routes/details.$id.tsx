@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
 import {Minus, Plus} from "lucide-react";
-import {formSchema} from "@/form/record/formSchema.ts";
+import {formSchema} from "@/form/recordPhotos/formSchema.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
 import {Slider} from "@/components/ui/slider.tsx";
 import {FileInput} from "@/form/FileInput.tsx";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
+import RecordPhoto from "@/api/RecordPhoto.ts";
 
 export const Route = createFileRoute('/details/$id')({
     loader: ({params: {id}}) => Record.item<TExpense>(id),
@@ -29,7 +30,7 @@ export const Route = createFileRoute('/details/$id')({
 function Details() {
     const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location} = Route.useLoaderData()
     const max = Math.ceil(count * k - innerCount)
-    const min = Number(max !== 0)
+    const min = 0
     const {toast} = useToast()
     const router = useRouter()
 
@@ -43,7 +44,7 @@ function Details() {
 
     async function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
         try {
-            await Record.photo(id, formData)
+            await RecordPhoto.create(formData, id)
             await router.invalidate()
             form.reset()
             toast({
@@ -68,7 +69,7 @@ function Details() {
                 <p>Комментарий: <span className="text-emerald-500 font-bold">{comment}</span></p>
             </div>
             <div className="m-4 p-4 bg-slate-900">
-                {!min ? "Все объекты загружены" : <Form {...form}>
+                <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
@@ -116,7 +117,7 @@ function Details() {
                         <FileInput location={location}/>
                         <ButtonSubmit/>
                     </form>
-                </Form>}
+                </Form>
             </div>
         </div>
     )

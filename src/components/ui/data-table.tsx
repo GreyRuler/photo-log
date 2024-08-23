@@ -14,7 +14,6 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {useState} from "react";
-import {Route} from "@/routes/details.$id";
 import {TExpense} from "@/api/Record.ts";
 import {cn} from "@/lib/utils.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
@@ -25,13 +24,13 @@ import {ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRight
 interface DataTableProps<TData> {
     columns: ColumnDef<TData>[]
     data: TData[]
+    onRowNavigate: (id:string) => void
     pagination: boolean
 }
 
 export function DataTable(
-    {columns, data, pagination = false}: DataTableProps<TExpense>
+    {columns, data, onRowNavigate, pagination = false}: DataTableProps<TExpense>
 ) {
-    const navigate = Route.useNavigate()
     const [sorting, setSorting] = useState<ColumnSort[]>([])
     const [expanded, setExpanded] = useState<ExpandedState>({0:true});
 
@@ -85,7 +84,7 @@ export function DataTable(
                                     onClick={
                                         row.original.number
                                             ? row.getToggleExpandedHandler()
-                                            : () => navigate({to: '/details/$id', params: {id: String(row.original.id)}})
+                                            : () => onRowNavigate(String(row.original.id))
                                     }
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}

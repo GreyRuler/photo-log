@@ -14,4 +14,9 @@ class Category extends Model
     ];
 
     public $timestamps = false;
+
+    public function photos()
+    {
+        return $this->hasMany(CategoryPhoto::class);
+    }
 }

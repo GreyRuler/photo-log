@@ -1,14 +1,14 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
-import Photo from "@/api/Photo.ts";
 import {CategoriesNotFound} from "@/components/CategoriesNotFound.tsx";
 import {nanoid} from "nanoid";
+import Category, {TCategory} from "@/api/Category.ts";
 
-export const Route = createFileRoute('/photos/all/')({
-    loader: () => Photo.all(),
-    component: Index,
+export const Route = createFileRoute('/categories/')({
+    loader: () => Category.list<TCategory>(),
+    component: Categories
 })
 
-function Index() {
+function Categories() {
     const data = Route.useLoaderData()
 
     if (data.length === 0) {
@@ -22,12 +22,12 @@ function Index() {
                     <Link
                         key={nanoid()}
                         className="text-base rounded-md bg-slate-700 p-4"
-                        to="/photos/all/category"
-                        search={{
-                            category: item
+                        to="/categories/$id"
+                        params={{
+                            id: String(item.id)
                         }}
                     >
-                        {item}
+                        {item.name}
                     </Link>
                 ))}
             </div>

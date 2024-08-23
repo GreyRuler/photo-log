@@ -6,11 +6,11 @@ import {Form as FormProvider} from "@/components/ui/form.tsx";
 import {formSchema, FormSchemaPhoto} from "@/form/photos/formSchema.ts";
 import {Form} from "@/form/photos/Form.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
-import Photo from "@/api/Photo.ts";
 import {CategoriesNotFound} from "@/components/CategoriesNotFound.tsx";
 import {useSettings} from "@/context/settings.tsx";
+import CategoryPhoto from "@/api/CategoryPhoto.ts";
 
-export const Route = createFileRoute('/photos/')({
+export const Route = createFileRoute('/categories/upload')({
     loader: () => Category.list<TCategory>(),
     component: Upload
 })
@@ -19,23 +19,22 @@ function Upload() {
     const {settings} = useSettings()
     const data = Route.useLoaderData()
     const {toast} = useToast()
-    const categories = data.map((item) => item.name)
 
-    if (categories.length === 0) {
+    if (data.length === 0) {
         return <CategoriesNotFound/>
     }
 
     const form = useForm<FormSchemaPhoto>({
-        resolver: zodResolver(formSchema(categories)),
+        resolver: zodResolver(formSchema(data.map(item => String(item.id)))),
         defaultValues: {
-            category: categories[0],
+            category: String(data[0].id),
             file: undefined
         }
     })
 
     async function onSubmit(data: FormSchemaPhoto) {
         try {
-            await Photo.upload(data)
+            await CategoryPhoto.create(data, Number(data.category))
             form.reset()
             toast({
                 description: "Фотография загружена",
@@ -50,7 +49,7 @@ function Upload() {
     return (
         <div className="h-full overflow-auto flex p-8">
             <FormProvider {...form}>
-                <Form categories={categories} location={settings?.event_location ?? ""} onSubmit={onSubmit}/>
+                <Form categories={data} location={settings?.event_location ?? ""} onSubmit={onSubmit}/>
             </FormProvider>
         </div>
     )

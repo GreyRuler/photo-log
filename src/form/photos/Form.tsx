@@ -7,9 +7,10 @@ import {SubmitHandler, useFormContext} from "react-hook-form";
 import {FormSchemaPhoto} from "@/form/photos/formSchema.ts";
 import {FileInput} from "@/form/FileInput.tsx";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
+import {TCategory} from "@/api/Category.ts";
 
 type Props = {
-    categories: string[]
+    categories: TCategory[]
     location: string
     onSubmit: SubmitHandler<FormSchemaPhoto>
 };
@@ -37,13 +38,13 @@ export function Form({categories, location, onSubmit}: Props) {
                                         <FormItem key={id}>
                                             <FormControl>
                                                 <Fragment>
-                                                    <RadioGroupItem value={item} id={id}
+                                                    <RadioGroupItem value={String(item.id)} id={id}
                                                                     className="peer sr-only"/>
                                                     <Label
                                                         htmlFor={id}
                                                         className="w-full h-full text-base rounded-md bg-slate-700 p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:bg-slate-900 [&:has([data-state=checked])]:bg-slate-900 peer-data-[state=checked]:text-accent [&:has([data-state=checked])]:text-accent"
                                                     >
-                                                        {item}
+                                                        {item.name}
                                                     </Label>
                                                 </Fragment>
                                             </FormControl>

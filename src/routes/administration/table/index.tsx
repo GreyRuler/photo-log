@@ -9,7 +9,7 @@ import {Input} from "@/components/ui/input.tsx";
 import Form from "@/form/stars/Form.tsx";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
-export const Route = createFileRoute('/administration/table')({
+export const Route = createFileRoute('/administration/table/')({
     loader: () => Record.list<TExpense>(),
     component: AdministrationTable,
 })
@@ -98,10 +98,13 @@ const columns: ColumnDef<TExpense>[] = [
 
 function AdministrationTable() {
     const data = Route.useLoaderData()
+    const navigate = Route.useNavigate()
+
+    const onNavigate = (id: string) => navigate({to: '/administration/table/details/$id', params: {id}})
 
     return (
         <div className="h-full">
-            <DataTable columns={columns} data={data} pagination={true}/>
+            <DataTable columns={columns} data={data} pagination={true} onRowNavigate={onNavigate}/>
         </div>
     )
 }

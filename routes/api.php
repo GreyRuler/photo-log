@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryPhotoController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\RecordPhotoController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SheetController;
 use App\Http\Controllers\UserController;
@@ -26,16 +27,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/sheet/collect', [SheetController::class, 'collect']);
     Route::get('/sheet/data', [SheetController::class, 'data']);
     Route::get('/records/favorites', [RecordController::class, 'favorites']);
-    Route::post('/records/{record}/photo', [RecordController::class, 'photo']);
     Route::apiResource('records', RecordController::class);
+    Route::apiResource('records.photos', RecordPhotoController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('categories.photos', CategoryPhotoController::class);
     Route::apiResource('notifications', NotificationController::class);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/photos/upload', [PhotoController::class, 'upload']);
-    Route::get('/photos', [PhotoController::class, 'all']);
-    Route::get('/photos/category', [PhotoController::class, 'allByCategory']);
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::post('/settings/update', [SettingsController::class, 'update']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

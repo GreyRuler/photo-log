@@ -1,0 +1,5 @@
+app/common
+app/records
+app/data.json
+!public/
+!.gitignore
