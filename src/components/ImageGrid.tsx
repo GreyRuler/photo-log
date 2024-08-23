@@ -39,7 +39,7 @@ export function ImageGrid({ images, onDelete }: Props) {
                                 </div>
                             </div>
                         </DrawerTrigger>
-                        <DrawerContent className="text-white bg-primary border-none h-dvh">
+                        <DrawerContent className="text-white bg-primary border-none h-svh">
                             <DrawerHeader>
                                 <DrawerTitle>Просмотр фотографии</DrawerTitle>
                                 <DrawerDescription></DrawerDescription>

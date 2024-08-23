@@ -55,7 +55,7 @@ function AuthLayout() {
     const matchDetails = matchRoute({to: '/details/$id', fuzzy: true})
 
     return (
-        <div className="text-white h-dvh overflow-hidden flex flex-col">
+        <div className="text-white h-svh overflow-hidden flex flex-col">
             {auth.isAuthenticated && <header className="w-full bg-primary py-3">
                 <h1 className="font-bold text-base text-center">{settings?.event_name}</h1>
             </header>}
