@@ -41,9 +41,7 @@ function Details() {
                 <p>Единица измерения: <span className="text-emerald-500 font-bold">{unit}</span></p>
                 <p>Комментарий: <span className="text-emerald-500 font-bold">{comment}</span></p>
             </div>
-            <div className="m-4 p-4 bg-slate-900">
-                <ImageGrid images={photos} onDelete={onDelete}/>
-            </div>
+            {photos.length !== 0 && <ImageGrid images={photos} onDelete={onDelete}/>}
         </div>
     )
 }

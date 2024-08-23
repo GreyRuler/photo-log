@@ -21,18 +21,20 @@ function Category() {
             toast({
                 description: "Фотография удалена"
             })
-        } catch(e) {
+        } catch (e) {
             if (e instanceof Error) toast({
                 description: e.message
             })
         }
     }
 
+    if (images.length === 0) {
+        return null
+    }
+
     return (
         <div className="h-full overflow-auto">
-            <div className="m-4 p-4 bg-slate-900">
-                <ImageGrid images={images} onDelete={onDelete}/>
-            </div>
+            {images.length !== 0 && <ImageGrid images={images} onDelete={onDelete}/>}
         </div>
     )
 }
