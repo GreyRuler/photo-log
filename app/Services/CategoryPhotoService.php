@@ -5,12 +5,15 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\CategoryPhoto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryPhotoService
 {
     public function create(Request $request, Category $category) {
         $file = $request->file('file');
+        Log::info('record');
+        Log::info($file);
 
         $path = $this->save($category->name, $file);
         return CategoryPhoto::create([
