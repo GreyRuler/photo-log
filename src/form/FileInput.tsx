@@ -23,11 +23,9 @@ export function FileInput({location}: Props) {
 
     async function handleFileChange(fileList: FileList) {
         setProcess(true)
+        setBackgroundImage(null)
         const file = fileList[0];
-        if (!file) {
-            setBackgroundImage(null)
-            return
-        }
+        if (!file) return
 
         const tags = await ExifReader.load(file);
         const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
