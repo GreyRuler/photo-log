@@ -29,69 +29,41 @@ export function FileInput({location}: Props) {
             return
         }
 
+        const tags = await ExifReader.load(file);
+        const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
+
         new Compressor(file, {
             quality: 0.6,
             success(result) {
-                // const newFile = new File([result], file.name, { type: result.type })
-                // form.setValue('file', newFile);
-                // setProcess(false)
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    const imgSrc = e.target?.result as string;
-                    const tags = await ExifReader.load(file);
-                    const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
+                const newFile = new File([result], file.name, { type: result.type })
+                setBackgroundImage(URL.createObjectURL(result));
+                form.setValue('file', newFile);
+                setProcess(false)
+            },
+            drew(context, canvas) {
+                const fontSize = Math.round(canvas.width / 60);
+                const padding = 10;
+                const lineHeight = fontSize + 4;
+                const textHeight = lineHeight * 2 + padding * 2;
 
-                    try {
-                        const processedImage = await processImage(imgSrc, imageDate, location);
-                        setBackgroundImage(URL.createObjectURL(processedImage));
-                        form.setValue('file', new File([processedImage], file.name, { type: file.type }));
-                        setProcess(false)
-                    } catch (e) {
-                        if (e instanceof Error) toast({
-                            description: e.message
-                        })
-                    }
-                };
-                reader.readAsDataURL(result);
+                // Устанавливаем цвет фона для текста
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, canvas.width, textHeight);
+
+                // Устанавливаем стиль текста
+                context.textAlign = 'right';
+                context.fillStyle = 'black';
+                context.font = `${fontSize}px Arial`;
+
+                // Добавляем текст (дату и местоположение)
+                context.fillText(imageDate, canvas.width - padding, fontSize + padding);
+                context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
             },
             error(err) {
                 toast({
                     description: err.message
                 })
             },
-        });
-    }
-
-    async function processImage(imageSrc: string, date: string, location: string): Promise<Blob> {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => {
-                const fontSize = Math.round(img.width / 60);
-                const padding = 10;
-                const lineHeight = fontSize + 4;
-                const textHeight = lineHeight * 2 + padding * 2;
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height + textHeight;
-
-                const ctx = canvas.getContext('2d');
-                if (ctx) {
-                    ctx.fillStyle = 'white';
-                    ctx.fillRect(0, 0, canvas.width, textHeight);
-                    ctx.textAlign = 'right';
-                    ctx.fillStyle = 'black';
-                    ctx.font = `${fontSize}px Arial`;
-                    ctx.fillText(date, canvas.width - padding, fontSize + padding);
-                    ctx.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
-                    ctx.drawImage(img, 0, textHeight);
-                    canvas.toBlob((blob) => {
-                        if (blob === null) reject(new Error("Ошибка обработки фотографии"))
-                        resolve(blob!);
-                    }, 'image/jpeg');
-                    // resolve(canvas.toDataURL('image/jpeg'));
-                }
-            };
-            img.src = imageSrc;
         });
     }
 
