@@ -9,6 +9,7 @@ import ExifReader from 'exifreader';
 import Compressor from 'compressorjs';
 import Spinner from "@/components/Spinner.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
+import heic2any from "heic2any";
 
 type Props = {
     location: string
@@ -24,16 +25,29 @@ export function FileInput({location}: Props) {
     async function handleFileChange(fileList: FileList) {
         setProcess(true)
         setBackgroundImage(null)
-        const file = fileList[0];
+        let file = fileList[0];
         if (!file) return
 
-        const tags = await ExifReader.load(file);
-        const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
+        const tags = await ExifReader.load(file)
+        const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
+        const {lastModified, name: filename} = file
+        if (file.type === "image/heic") {
+            const mimeType = "image/jpeg"
+            const convertedBlobs = await heic2any({
+                blob: fileList[0],
+                toType: mimeType,
+            });
+            const blob = Array.isArray(convertedBlobs) ? convertedBlobs[0] : convertedBlobs;
+            file = new File([blob], filename, {
+                type: mimeType,
+                lastModified: Date.now(),
+            })
+        }
 
         new Compressor(file, {
             quality: 0.6,
             success(result) {
-                const newFile = new File([result], file.name, { type: result.type })
+                const newFile = new File([result], filename, { type: result.type, lastModified })
                 setBackgroundImage(URL.createObjectURL(result));
                 form.setValue('file', newFile);
                 setProcess(false)
@@ -54,7 +68,7 @@ export function FileInput({location}: Props) {
                 context.font = `${fontSize}px Arial`;
 
                 // Добавляем текст (дату и местоположение)
-                context.fillText(imageDate, canvas.width - padding, fontSize + padding);
+                context.fillText(date, canvas.width - padding, fontSize + padding);
                 context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
             },
             error(err) {
