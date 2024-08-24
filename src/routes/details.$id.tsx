@@ -61,6 +61,7 @@ function Details() {
         <div className="h-full overflow-auto">
             <div className="p-2 bg-slate-700 text-center">{name}</div>
             <div className="m-4 p-4 bg-slate-900">
+                <p>Местоположение: <span className="text-emerald-500 font-bold">{location}</span></p>
                 <p>Загружено на данный момент: <span className="text-emerald-500 font-bold">{innerCount}</span></p>
                 <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{max}</span></p>
                 <p>Дата, когда можно найти: <span className="text-emerald-500 font-bold">{timeArrival}</span></p>
@@ -70,7 +71,7 @@ function Details() {
             </div>
             <div className="m-4 p-4 bg-slate-900">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
                             name="count"

@@ -43,6 +43,7 @@ export function FileInput({location}: Props) {
                 lastModified: Date.now(),
             })
         }
+        console.log(file.type)
 
         new Compressor(file, {
             quality: 0.6,
