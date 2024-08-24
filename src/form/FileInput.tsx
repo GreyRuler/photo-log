@@ -91,7 +91,7 @@ export function FileInput({location}: Props) {
                                 </Fragment>
                             )}
                             <FormControl>
-                                <Input {...fileRef} type="file" className="hidden" accept="image/*"
+                                <Input {...fileRef} type="file" className="hidden" accept="image/*,.heic,.heif,image/heic,image/heif"
                                        onChange={(e) => {
                                            fileRef.onChange(e)
                                            e.target.files && handleFileChange(e.target.files)

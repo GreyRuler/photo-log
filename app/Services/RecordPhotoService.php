@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Record;
 use App\Models\RecordPhoto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class RecordPhotoService
@@ -14,8 +13,6 @@ class RecordPhotoService
         $increment = $record->photos()->max('increment') + 1 ?? 1;
         $count = $request->input('count');
         $file = $request->file('file');
-        Log::info('record');
-        Log::info($file);
 
         $path = $this->save($record, $file, $increment);
         return RecordPhoto::create([
