@@ -54,7 +54,6 @@
         "date-fns": "^3.6.0",
         "embla-carousel-react": "^8.0.2",
         "exifreader": "^4.23.3",
-        "fabric": "^6.3.0",
         "input-otp": "^1.2.4",
         "jest-environment-jsdom": "^29.7.0",
         "lucide-react": "^0.372.0",

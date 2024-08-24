@@ -30,7 +30,6 @@ function Index() {
             .then(() => {
                 toast({
                     description: "Настройки обновлены",
-
                 })
             })
     }

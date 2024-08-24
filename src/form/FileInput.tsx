@@ -1,17 +1,14 @@
 import {FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {cn, dataURLtoFile, formatDateTimeOriginal} from "@/lib/utils.ts";
+import {cn, formatDateTimeOriginal} from "@/lib/utils.ts";
 import {Fragment, useState} from "react";
 import {Camera} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useFormContext} from "react-hook-form";
 import ExifReader from 'exifreader';
-import {
-    Canvas,
-    FabricImage,
-    FabricText, Rect,
-} from 'fabric';
+import Compressor from 'compressorjs';
 import Spinner from "@/components/Spinner.tsx";
+import {useToast} from "@/components/ui/use-toast.ts";
 
 type Props = {
     location: string
@@ -19,6 +16,7 @@ type Props = {
 
 export function FileInput({location}: Props) {
     const form = useFormContext()
+    const {toast} = useToast()
     const [backgroundImage, setBackgroundImage] = useState<string | ArrayBuffer | null | undefined>(null);
     const fileRef = form.register('file', {required: true})
     const [isProcess, setProcess] = useState(false)
@@ -30,68 +28,71 @@ export function FileInput({location}: Props) {
             setBackgroundImage(null)
             return
         }
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const imgSrc = e.target?.result as string;
-            const tags = await ExifReader.load(file);
-            const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
 
-            const processedImage = await processImage(imgSrc, imageDate, location);
+        new Compressor(file, {
+            quality: 0.6,
+            success(result) {
+                // const newFile = new File([result], file.name, { type: result.type })
+                // form.setValue('file', newFile);
+                // setProcess(false)
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const imgSrc = e.target?.result as string;
+                    const tags = await ExifReader.load(file);
+                    const imageDate = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
 
-            setBackgroundImage(processedImage);
-            form.setValue('file', dataURLtoFile(processedImage, file.name));
-            setProcess(false)
-        };
-        reader.readAsDataURL(file);
+                    try {
+                        const processedImage = await processImage(imgSrc, imageDate, location);
+                        setBackgroundImage(URL.createObjectURL(processedImage));
+                        form.setValue('file', new File([processedImage], file.name, { type: file.type }));
+                        setProcess(false)
+                    } catch (e) {
+                        if (e instanceof Error) toast({
+                            description: e.message
+                        })
+                    }
+                };
+                reader.readAsDataURL(result);
+            },
+            error(err) {
+                toast({
+                    description: err.message
+                })
+            },
+        });
     }
 
-    async function processImage(imageSrc: string, date: string, location: string): Promise<string> {
-        return new Promise((resolve) => {
-            FabricImage.fromURL(imageSrc).then((img) => {
-                const canvas = new Canvas(undefined, {width: img.width, height: img.height})
-                img.scaleToWidth(canvas.width!);
-                canvas.add(img);
+    async function processImage(imageSrc: string, date: string, location: string): Promise<Blob> {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                const fontSize = Math.round(img.width / 60);
+                const padding = 10;
+                const lineHeight = fontSize + 4;
+                const textHeight = lineHeight * 2 + padding * 2;
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height + textHeight;
 
-                const text = `${date}\n${location}`
-                const fontSize = Math.round(canvas.width / 60)
-                const padding = 10
-                // Добавление текста
-                const fabricText = new FabricText(text, {
-                    left: canvas.width! - 210,
-                    top: 30,
-                    fontSize: fontSize,
-                    fill: 'black',
-                });
-
-                const textHeight = (text.split('\n').length * fontSize + 1) + padding;
-
-                const rectHeight = textHeight + padding;
-
-                // Добавление прямоугольника
-                const rect = new Rect({
-                    left: 0,
-                    top: 0,
-                    fill: 'white',
-                    width: canvas.width!,
-                    height: rectHeight,
-                });
-                canvas.add(rect);
-
-                fabricText.set({
-                    left: padding,
-                    top: padding,
-                });
-                canvas.add(fabricText);
-
-                img.set({
-                    top: rectHeight,
-                });
-
-                // Экспорт изображения
-                const dataUrl = canvas.toDataURL();
-                resolve(dataUrl);
-            })
-        })
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, textHeight);
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = 'black';
+                    ctx.font = `${fontSize}px Arial`;
+                    ctx.fillText(date, canvas.width - padding, fontSize + padding);
+                    ctx.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
+                    ctx.drawImage(img, 0, textHeight);
+                    canvas.toBlob((blob) => {
+                        if (blob === null) reject(new Error("Ошибка обработки фотографии"))
+                        resolve(blob!);
+                    }, 'image/jpeg');
+                    // resolve(canvas.toDataURL('image/jpeg'));
+                }
+            };
+            img.src = imageSrc;
+        });
     }
 
     return (
