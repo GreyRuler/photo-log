@@ -1,6 +1,6 @@
 import {FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {cn, formatDateTimeOriginal} from "@/lib/utils.ts";
+import {cn, formatDate, formatDateTimeOriginal} from "@/lib/utils.ts";
 import {Fragment, useState} from "react";
 import {Camera} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
@@ -29,7 +29,7 @@ export function FileInput({location}: Props) {
         if (!file) return
 
         const tags = await ExifReader.load(file)
-        const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : 'Дата неизвестна';
+        const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : formatDate(new Date());
         const {lastModified, name: filename} = file
         if (file.type === "image/heic") {
             const mimeType = "image/jpeg"

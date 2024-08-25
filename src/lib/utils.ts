@@ -82,10 +82,7 @@ export function getPriority(priority: Priority) {
     }
 }
 
-export function formatDateTimeOriginal(dateTimeOriginal: string) {
-    const [dateOriginal, timeOriginal] = dateTimeOriginal.split(" ")
-    const date = new Date(`${dateOriginal.replace(/:/g, '-')} ${timeOriginal}`);
-
+export function formatDate(date: Date) {
     const formatter = new Intl.DateTimeFormat('ru-RU', {
         year: 'numeric',
         month: 'long',
@@ -93,9 +90,16 @@ export function formatDateTimeOriginal(dateTimeOriginal: string) {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-    });
+    })
 
-    const formattedDate = formatter.format(date);
+    return formatter.format(date);
+}
+
+export function formatDateTimeOriginal(dateTimeOriginal: string) {
+    const [dateOriginal, timeOriginal] = dateTimeOriginal.split(" ")
+    const date = new Date(`${dateOriginal.replace(/:/g, '-')} ${timeOriginal}`);
+
+    const formattedDate = formatDate(date);
 
     return formattedDate.replace(',', ' г.,');
 }
