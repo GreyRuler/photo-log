@@ -99,3 +99,16 @@ body {
     transform: translate(50%, -50%);
     background-color: #dc2626;
 }
+
+.user.notify:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    background-color: #dc2626;
+}
