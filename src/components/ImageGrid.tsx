@@ -36,6 +36,7 @@ export function ImageGrid({images, onDelete}: Props) {
                                             className="object-cover w-full h-full border border-white"
                                             src={`/images/${encodeURIComponent(encodeURIComponent(image.path))}`}
                                             alt={`Image ${image.id}`}
+                                            loading="lazy"
                                         />
                                     </div>
                                 </div>
@@ -50,6 +51,7 @@ export function ImageGrid({images, onDelete}: Props) {
                                         className="object-contain h-full w-full"
                                         src={`/images/${encodeURIComponent(encodeURIComponent(image.path))}`}
                                         alt={`Image ${image.id}`}
+                                        loading="lazy"
                                     />
                                 </div>
                                 <DrawerFooter className="pt-2 grid grid-cols-2">
