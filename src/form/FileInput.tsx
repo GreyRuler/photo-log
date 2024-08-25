@@ -49,7 +49,7 @@ export function FileInput({location}: Props) {
         new Compressor(file, {
             quality: 0.6,
             success(result) {
-                const newFile = new File([result], filename, { type: result.type, lastModified })
+                const newFile = new File([result], filename, {type: result.type, lastModified})
                 setBackgroundImage(URL.createObjectURL(result));
                 form.setValue('file', newFile);
                 setProcess(false)
@@ -59,6 +59,14 @@ export function FileInput({location}: Props) {
                 const padding = 10;
                 const lineHeight = fontSize + 4;
                 const textHeight = lineHeight * 2 + padding * 2;
+
+                // Сохранение текущего состояния контекста
+                context.save();
+
+                // Сдвиг изображения вниз, чтобы освободить место для текста сверху
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.putImageData(imageData, 0, textHeight);
 
                 // Устанавливаем цвет фона для текста
                 context.fillStyle = 'white';
@@ -72,6 +80,9 @@ export function FileInput({location}: Props) {
                 // Добавляем текст (дату и местоположение)
                 context.fillText(date, canvas.width - padding, fontSize + padding);
                 context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
+
+                // Восстановление контекста
+                context.restore();
             },
             error(err) {
                 toast({
@@ -107,7 +118,8 @@ export function FileInput({location}: Props) {
                                 </Fragment>
                             )}
                             <FormControl>
-                                <Input {...fileRef} type="file" className="hidden" accept="image/*,.heic,.heif,image/heic,image/heif"
+                                <Input {...fileRef} type="file" className="hidden"
+                                       accept="image/*,.heic,.heif,image/heic,image/heif"
                                        onChange={(e) => {
                                            fileRef.onChange(e)
                                            e.target.files && handleFileChange(e.target.files)
