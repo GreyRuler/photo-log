@@ -19,6 +19,7 @@ class CategoryPhotoResource extends JsonResource
             'path' => $this->path,
             'category_id' => $this->category_id,
             'owner' => $this->category_id,
+            'category' => $this->category
         ];
     }
 }

@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {ImageGrid} from "@/components/ImageGrid.tsx";
+import {RecordImageGrid} from "@/components/RecordImageGrid.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
 import RecordPhoto, {DRecordPhoto} from "@/api/RecordPhoto.ts";
 import {ImagesNotFound} from "@/components/ImagesNotFound.tsx";
@@ -35,6 +35,6 @@ function RecordsPhotos() {
     }
 
     return (
-        <ImageGrid images={photos} onDelete={onDelete}/>
+        <RecordImageGrid images={photos} onDelete={onDelete}/>
     )
 }

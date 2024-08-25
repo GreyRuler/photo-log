@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
 import CategoryPhoto, {DCategoryPhoto} from "@/api/CategoryPhoto.ts";
-import {ImageGrid} from "@/components/ImageGrid.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
+import {CategoryImageGrid} from "@/components/CategoryImageGrid.tsx";
 
 export const Route = createFileRoute('/categories/$id')({
     loader: ({params: {id}}) => CategoryPhoto.list<DCategoryPhoto>(Number(id)),
@@ -33,7 +33,7 @@ function Category() {
 
     return (
         <div className="h-full overflow-auto">
-            {images.length !== 0 && <ImageGrid images={images} onDelete={onDelete}/>}
+            {images.length !== 0 && <CategoryImageGrid images={images} onDelete={onDelete}/>}
         </div>
     )
 }

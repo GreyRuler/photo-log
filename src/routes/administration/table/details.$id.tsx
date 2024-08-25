@@ -1,6 +1,6 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {Record, TExpense} from "@/api/Record.ts";
-import {ImageGrid} from "@/components/ImageGrid.tsx";
+import {RecordImageGrid} from "@/components/RecordImageGrid.tsx";
 import RecordPhoto from "@/api/RecordPhoto.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
 
@@ -41,7 +41,7 @@ function Details() {
                 <p>Единица измерения: <span className="text-emerald-500 font-bold">{unit}</span></p>
                 <p>Комментарий: <span className="text-emerald-500 font-bold">{comment}</span></p>
             </div>
-            {photos.length !== 0 && <ImageGrid images={photos} onDelete={onDelete}/>}
+            {photos.length !== 0 && <RecordImageGrid images={photos} onDelete={onDelete}/>}
         </div>
     )
 }

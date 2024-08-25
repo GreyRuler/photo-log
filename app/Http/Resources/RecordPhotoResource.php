@@ -21,6 +21,7 @@ class RecordPhotoResource extends JsonResource
             'count' => $this->count,
             'record_id' => $this->record_id,
             'owner' => $this->record_id,
+            'record' => $this->record
         ];
     }
 }

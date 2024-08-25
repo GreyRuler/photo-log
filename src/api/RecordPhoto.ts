@@ -1,5 +1,6 @@
 import Entity from "@/api/Entity.ts";
 import axiosClient from "@/api/axios-client.ts";
+import {TExpense} from "@/api/Record.ts";
 
 export type DRecordPhoto = {
     id: number;
@@ -8,6 +9,7 @@ export type DRecordPhoto = {
     count: number;
     record_id: number;
     owner: number;
+    record: TExpense
 }
 
 export default class RecordPhoto extends Entity {

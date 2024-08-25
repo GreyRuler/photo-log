@@ -1,8 +1,8 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {ImageGrid} from "@/components/ImageGrid.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
 import CategoryPhoto, {DCategoryPhoto} from "@/api/CategoryPhoto.ts";
 import {ImagesNotFound} from "@/components/ImagesNotFound.tsx";
+import {CategoryImageGrid} from "@/components/CategoryImageGrid.tsx";
 
 export const Route = createFileRoute('/administration/photos/categories')({
     loaderDeps: ({ search: { dateFrom, dateTo } }) => ({ dateFrom, dateTo }),
@@ -35,6 +35,6 @@ function CategoriesPhotos() {
     }
 
     return (
-        <ImageGrid images={photos} onDelete={onDelete}/>
+        <CategoryImageGrid images={photos} onDelete={onDelete}/>
     )
 }
