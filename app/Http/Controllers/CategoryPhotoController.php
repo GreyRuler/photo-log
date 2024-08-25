@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryPhotoResource;
 use App\Models\Category;
 use App\Models\CategoryPhoto;
 use App\Services\CategoryPhotoService;
-use App\Services\RecordPhotoService;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CategoryPhotoController extends Controller
 {
@@ -21,9 +19,29 @@ class CategoryPhotoController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function all(Request $request)
+    {
+        $dateFrom = $request->query('dateFrom');
+        $dateTo = $request->query('dateTo');
+        $photos = CategoryPhoto::query()
+            ->when($dateFrom, function ($query, $dateFrom) {
+                return $query->where('created_at', '>=', $dateFrom);
+            })
+            ->when($dateTo, function ($query, $dateTo) {
+                return $query->where('created_at', '<=', $dateTo);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return CategoryPhotoResource::collection($photos);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Category $category)
     {
-        return $category->photos()->get();
+        return CategoryPhotoResource::collection($category->photos()->get());
     }
 
     /**

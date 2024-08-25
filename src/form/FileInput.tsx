@@ -44,10 +44,6 @@ export function FileInput({location}: Props) {
         const tags = await ExifReader.load(file)
         const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : formatDate(new Date());
 
-        toast({
-            description: `Дата для фото ${date}`
-        })
-
         const {lastModified} = file
 
         new Compressor(file, {

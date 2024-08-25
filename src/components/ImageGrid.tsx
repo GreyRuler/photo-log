@@ -15,7 +15,7 @@ import {DCategoryPhoto} from "@/api/CategoryPhoto.ts";
 
 type Props = {
     images: DRecordPhoto[] | DCategoryPhoto[]
-    onDelete: (id: number) => void
+    onDelete: (id: number, owner: number) => void
 }
 
 export function ImageGrid({images, onDelete}: Props) {
@@ -56,7 +56,7 @@ export function ImageGrid({images, onDelete}: Props) {
                                     <DrawerClose asChild>
                                         <Button
                                             className="bg-slate-900 font-bold text-red-500 w-full text-base border focus:bg-red-500 focus:text-white border-red-900"
-                                            variant="outline" onClick={() => onDelete(image.id)}>Удалить</Button>
+                                            variant="outline" onClick={() => onDelete(image.id, image.owner)}>Удалить</Button>
                                     </DrawerClose>
                                     <Button
                                         className="bg-slate-900 font-bold text-blue-500 w-full text-base border focus:bg-blue-500 focus:text-white border-blue-500"

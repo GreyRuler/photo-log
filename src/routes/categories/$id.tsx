@@ -11,10 +11,9 @@ export const Route = createFileRoute('/categories/$id')({
 function Category() {
     const images = Route.useLoaderData()
     const navigate = Route.useNavigate()
-    const {id: owner} = Route.useParams()
     const {toast} = useToast()
 
-    const onDelete = async (id: number) => {
+    const onDelete = async (id: number, owner: number) => {
         try {
             await CategoryPhoto.delete(String(id), Number(owner))
             await navigate({})

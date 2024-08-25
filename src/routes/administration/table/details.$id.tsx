@@ -10,12 +10,12 @@ export const Route = createFileRoute('/administration/table/details/$id')({
 })
 
 function Details() {
-    const {id: owner, name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location, photos} = Route.useLoaderData()
+    const {name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location, photos} = Route.useLoaderData()
     const max = Math.ceil(count * k - innerCount)
     const {toast} = useToast()
     const navigate = Route.useNavigate()
 
-    const onDelete = async (id: number) => {
+    const onDelete = async (id: number, owner: number) => {
         try {
             await RecordPhoto.delete(String(id), owner)
             await navigate({})

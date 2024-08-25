@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RecordPhotoResource;
 use App\Models\Record;
 use App\Models\RecordPhoto;
 use App\Services\RecordPhotoService;
@@ -18,9 +19,29 @@ class RecordPhotoController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function all(Request $request)
+    {
+        $dateFrom = $request->query('dateFrom');
+        $dateTo = $request->query('dateTo');
+        $photos = RecordPhoto::query()
+            ->when($dateFrom, function ($query, $dateFrom) {
+                return $query->where('created_at', '>=', $dateFrom);
+            })
+            ->when($dateTo, function ($query, $dateTo) {
+                return $query->where('created_at', '<=', $dateTo);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return RecordPhotoResource::collection($photos);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Record $record)
     {
-        return $record->photos()->get();
+        return RecordPhotoResource::collection($record->photos()->get());
     }
 
     /**

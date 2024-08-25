@@ -28,6 +28,9 @@ import { Route as AdministrationTableIndexImport } from './routes/administration
 import { Route as AdministrationNotificationsIndexImport } from './routes/administration/notifications/index'
 import { Route as AdministrationCategoriesIndexImport } from './routes/administration/categories/index'
 import { Route as AdministrationUsersCreateImport } from './routes/administration/users/create'
+import { Route as AdministrationPhotosRecordsImport } from './routes/administration/photos/records'
+import { Route as AdministrationPhotosDownloadImport } from './routes/administration/photos/download'
+import { Route as AdministrationPhotosCategoriesImport } from './routes/administration/photos/categories'
 import { Route as AdministrationNotificationsCreateImport } from './routes/administration/notifications/create'
 import { Route as AdministrationCategoriesCreateImport } from './routes/administration/categories/create'
 import { Route as AdministrationUsersIdUpdateImport } from './routes/administration/users/$id.update'
@@ -126,6 +129,24 @@ const AdministrationUsersCreateRoute = AdministrationUsersCreateImport.update({
   path: '/administration/users/create',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AdministrationPhotosRecordsRoute =
+  AdministrationPhotosRecordsImport.update({
+    path: '/records',
+    getParentRoute: () => AdministrationPhotosRoute,
+  } as any)
+
+const AdministrationPhotosDownloadRoute =
+  AdministrationPhotosDownloadImport.update({
+    path: '/download',
+    getParentRoute: () => AdministrationPhotosRoute,
+  } as any)
+
+const AdministrationPhotosCategoriesRoute =
+  AdministrationPhotosCategoriesImport.update({
+    path: '/categories',
+    getParentRoute: () => AdministrationPhotosRoute,
+  } as any)
 
 const AdministrationNotificationsCreateRoute =
   AdministrationNotificationsCreateImport.update({
@@ -283,6 +304,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationNotificationsCreateImport
       parentRoute: typeof rootRoute
     }
+    '/administration/photos/categories': {
+      id: '/administration/photos/categories'
+      path: '/categories'
+      fullPath: '/administration/photos/categories'
+      preLoaderRoute: typeof AdministrationPhotosCategoriesImport
+      parentRoute: typeof AdministrationPhotosImport
+    }
+    '/administration/photos/download': {
+      id: '/administration/photos/download'
+      path: '/download'
+      fullPath: '/administration/photos/download'
+      preLoaderRoute: typeof AdministrationPhotosDownloadImport
+      parentRoute: typeof AdministrationPhotosImport
+    }
+    '/administration/photos/records': {
+      id: '/administration/photos/records'
+      path: '/records'
+      fullPath: '/administration/photos/records'
+      preLoaderRoute: typeof AdministrationPhotosRecordsImport
+      parentRoute: typeof AdministrationPhotosImport
+    }
     '/administration/users/create': {
       id: '/administration/users/create'
       path: '/administration/users/create'
@@ -378,7 +420,11 @@ export const routeTree = rootRoute.addChildren({
   LoginRoute,
   LogoutRoute,
   NotificationsRoute,
-  AdministrationPhotosRoute,
+  AdministrationPhotosRoute: AdministrationPhotosRoute.addChildren({
+    AdministrationPhotosCategoriesRoute,
+    AdministrationPhotosDownloadRoute,
+    AdministrationPhotosRecordsRoute,
+  }),
   AdministrationSettingsRoute,
   CategoriesIdRoute,
   CategoriesUploadRoute,
@@ -453,7 +499,12 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "notifications.tsx"
     },
     "/administration/photos": {
-      "filePath": "administration/photos.tsx"
+      "filePath": "administration/photos.tsx",
+      "children": [
+        "/administration/photos/categories",
+        "/administration/photos/download",
+        "/administration/photos/records"
+      ]
     },
     "/administration/settings": {
       "filePath": "administration/settings.tsx"
@@ -478,6 +529,18 @@ export const routeTree = rootRoute.addChildren({
     },
     "/administration/notifications/create": {
       "filePath": "administration/notifications/create.tsx"
+    },
+    "/administration/photos/categories": {
+      "filePath": "administration/photos/categories.tsx",
+      "parent": "/administration/photos"
+    },
+    "/administration/photos/download": {
+      "filePath": "administration/photos/download.tsx",
+      "parent": "/administration/photos"
+    },
+    "/administration/photos/records": {
+      "filePath": "administration/photos/records.tsx",
+      "parent": "/administration/photos"
     },
     "/administration/users/create": {
       "filePath": "administration/users/create.tsx"
