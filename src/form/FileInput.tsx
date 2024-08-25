@@ -27,15 +27,7 @@ export function FileInput({location}: Props) {
         setBackgroundImage(null)
         let file = fileList[0];
         if (!file) return
-
-        const tags = await ExifReader.load(file)
-        const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : formatDate(new Date());
-
-        toast({
-            description: `Дата для фото ${date}`
-        })
-
-        const {lastModified, name: filename} = file
+        const {name: filename} = file
         if (file.type === "image/heic") {
             const mimeType = "image/jpeg"
             const convertedBlobs = await heic2any({
@@ -48,7 +40,15 @@ export function FileInput({location}: Props) {
                 lastModified: Date.now(),
             })
         }
-        console.log(file.type)
+
+        const tags = await ExifReader.load(file)
+        const date = tags['DateTimeOriginal'] ? formatDateTimeOriginal(tags['DateTimeOriginal'].description) : formatDate(new Date());
+
+        toast({
+            description: `Дата для фото ${date}`
+        })
+
+        const {lastModified} = file
 
         new Compressor(file, {
             quality: 0.6,
