@@ -18,7 +18,7 @@ class CacheImages
         $response = $next($request);
 
         if ($request->is('images/*')) {
-            $response->header('Cache-Control', 'public, max-age=31536000'); // Кэшировать на 1 год
+            $response->header('Cache-Control', 'public, max-age=604800'); // Кэшировать на 1 неделю
         }
 
         return $response;

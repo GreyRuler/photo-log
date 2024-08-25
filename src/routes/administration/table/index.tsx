@@ -4,10 +4,11 @@ import {ColumnDef} from "@tanstack/react-table";
 import {Record, TExpense} from "@/api/Record.ts";
 import {Label} from "@/components/ui/label.tsx";
 import {cn, getPriority} from "@/lib/utils.ts";
-import {Info, Search, Star} from "lucide-react";
+import {Search, Star} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import Form from "@/form/stars/Form.tsx";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+import {TooltipPriority} from "@/components/TooltipPriority.tsx";
 
 export const Route = createFileRoute('/administration/table/')({
     loader: () => Record.list<TExpense>(),
@@ -55,7 +56,7 @@ const columns: ColumnDef<TExpense>[] = [
     },
     {
         accessorKey: "priority",
-        header: () => <div className="m-auto w-full inline-flex justify-center"><Info/></div>,
+        header: () => <TooltipPriority/>,
         cell: ({row: {original: {priority}}}) => {
             const {color, text} = getPriority(priority)
             return <TooltipProvider delayDuration={100}>
