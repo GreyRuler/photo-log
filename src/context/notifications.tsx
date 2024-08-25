@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-import {getStoredNotifications, setStoredNotifications, sleep} from '../lib/utils'
+import {getStoredNotifications, setStoredNotifications} from '../lib/utils'
 import Notification, {TNotification} from "@/api/Notification.ts";
+import {useState} from "react";
 
 export interface NotifyContext {
     isView: boolean
@@ -12,12 +13,11 @@ export interface NotifyContext {
 const NotifyContext = React.createContext<NotifyContext | null>(null)
 
 export function NotifyProvider({ children }: { children: React.ReactNode }) {
-    const notifications = getStoredNotifications()
+    const [notifications, setNotifications] = useState(getStoredNotifications())
     const [isView, setView] = React.useState(true)
 
     const notify = React.useCallback(async (notifications: TNotification[]) => {
-        await sleep(250)
-        // setNotifications(notifications)
+        setNotifications(notifications)
         setView(true)
         setStoredNotifications(notifications)
     }, [])
@@ -26,7 +26,7 @@ export function NotifyProvider({ children }: { children: React.ReactNode }) {
         Notification.list<TNotification>()
             .then((data) => {
                 setView(JSON.stringify(notifications) === JSON.stringify(data))
-                // setNotifications(data)
+                setNotifications(data)
             })
     }, [])
 

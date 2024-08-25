@@ -1,9 +1,10 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import {TUser} from "@/api/User.ts";
-import {ACCESS_USER_KEY, NOTIFICATIONS_KEY} from "@/config.ts";
+import {ACCESS_USER_KEY, NOTIFICATIONS_KEY, SETTINGS_KEY} from "@/config.ts";
 import {TNotification} from "@/api/Notification.ts";
 import {Priority} from "@/constants/priority.ts";
+import {DSettings} from "@/api/Settings.ts";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -35,6 +36,16 @@ export function getStoredNotifications() {
 
 export function setStoredNotifications(notifications: TNotification[]) {
     localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications))
+}
+
+export function getStoredSettings() {
+    const settings = localStorage.getItem(SETTINGS_KEY)
+    if (!settings) return []
+    return JSON.parse(settings) ?? [] as DSettings[]
+}
+
+export function setStoredSettings(settings: DSettings) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
 }
 
 export function getPriority(priority: Priority) {

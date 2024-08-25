@@ -16,6 +16,10 @@ import {Input} from "../components/ui/input";
 import {Button} from "../components/ui/button";
 import User from "../api/User";
 import logo from '@/assets/i/logo.svg';
+import {useNotify} from "@/context/notifications.tsx";
+import {useSettings} from "@/context/settings.tsx";
+import Notification, {TNotification} from "@/api/Notification.ts";
+import Settings from "@/api/Settings.ts";
 
 // eslint-disable-next-line ts/no-unnecessary-type-assertion
 const fallback = '/' as const
@@ -40,7 +44,9 @@ const formSchema = z.object({
 })
 
 function Login() {
-    const auth = useAuth()
+    const authContext = useAuth()
+    const notifyContext = useNotify()
+    const settingsContext = useSettings()
     const router = useRouter()
     const isLoading = useRouterState({select: (s) => s.isLoading})
     const navigate = Route.useNavigate()
@@ -60,7 +66,11 @@ function Login() {
         setIsSubmitting(true)
         try {
             const user = await User.login(data)
-            await auth.login(user)
+            await authContext.login(user)
+            const notification = await Notification.list<TNotification>()
+            await notifyContext.notify(notification)
+            const settings = await Settings.get()
+            await settingsContext.notify(settings)
 
             await router.invalidate()
 

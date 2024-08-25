@@ -25,13 +25,11 @@ function Index() {
         defaultValues: data
     })
 
-    function onSubmit(values: SettingsSchema) {
-        Settings.update(values)
-            .then(() => {
-                toast({
-                    description: "Настройки обновлены",
-                })
-            })
+    async function onSubmit(values: SettingsSchema) {
+        await Settings.update(values)
+        toast({
+            description: "Настройки обновлены",
+        })
     }
 
     const formSheetSync = useForm({
@@ -39,14 +37,11 @@ function Index() {
         defaultValues: data
     })
 
-    function onSubmitSheetSync({sheet_api}: FormSchemaSheetSync) {
-        Sheet.collect(sheet_api)
-            .then((response) => {
-                const {data} = response
-                toast({
-                    description: data.message
-                })
-            })
+    async function onSubmitSheetSync({sheet_api}: FormSchemaSheetSync) {
+        const {data} = await Sheet.collect(sheet_api)
+        toast({
+            description: data.message
+        })
     }
 
     return (
