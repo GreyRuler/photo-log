@@ -104,10 +104,10 @@ function AuthLayout() {
                 </Drawer>
                 <Drawer>
                     <DrawerTrigger asChild>
-                        <ActionButton icon={<User
+                        <ActionButton icon={<Notify size={2} isView={isView}><User
                             width="24" height="24"
                             className={cn((matchAdministration || matchNotifications) && "stroke-blue-600")}
-                        />}/>
+                        /></Notify>}/>
                     </DrawerTrigger>
                     <DrawerContent className="text-white bg-primary border-none">
                         <DrawerHeader>
