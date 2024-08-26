@@ -4,17 +4,18 @@ import {Switch} from "@/components/ui/switch.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {SubmitHandler, useFormContext} from "react-hook-form";
 import {z} from "zod";
-import {formSchema} from "@/form/user/formSchema.ts";
+import {createUserSchema} from "@/form/user/formSchema.ts";
 import {Undo2} from "lucide-react";
 import {Route} from "@/routes/administration/users";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 
 type Props = {
-    onSubmit: SubmitHandler<z.infer<typeof formSchema>>
+    isUpdate: boolean
+    onSubmit: SubmitHandler<z.infer<typeof createUserSchema>>
 }
 
-export default function Form({onSubmit}: Props) {
-    const form = useFormContext<z.infer<typeof formSchema>>()
+export default function FormCreate({onSubmit}: Props) {
+    const form = useFormContext<z.infer<typeof createUserSchema>>()
     const navigate = Route.useNavigate()
 
     return (

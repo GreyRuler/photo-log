@@ -7,6 +7,7 @@ import Notification, {TNotification} from "@/api/Notification.ts";
 import Page from "@/form/Page.tsx";
 import {Form as FormProvider} from "@/components/ui/form.tsx";
 import Form from "@/form/notification/Form.tsx";
+import {useToast} from "@/components/ui/use-toast.ts";
 
 export const Route = createFileRoute('/administration/notifications/$id/update')({
     loader: ({params: {id}}) => Notification.item<TNotification>(id),
@@ -14,6 +15,7 @@ export const Route = createFileRoute('/administration/notifications/$id/update')
 })
 
 function Update() {
+    const { toast } = useToast();
     const data = Route.useLoaderData()
     const navigate = Route.useNavigate()
     const {id} = Route.useParams()
@@ -25,6 +27,9 @@ function Update() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         await Notification.update(id, values)
         await navigate({to: "/administration/notifications"})
+        toast({
+            description: "Уведомление обновлено",
+        })
     }
 
     return (

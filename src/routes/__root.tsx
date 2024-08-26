@@ -63,7 +63,7 @@ function AuthLayout() {
                 <Outlet/>
             </main>
             {auth.isAuthenticated && <footer className="flex justify-center p-2 gap-8 bg-primary">
-                <Link to="/" activeProps={{ className: "group" }}>
+                <Link to="/" activeProps={{className: "group"}}>
                     <ActionButton icon={<Table2
                         width="24" height="24"
                         className={cn(
@@ -72,7 +72,7 @@ function AuthLayout() {
                         )}
                     />}/>
                 </Link>
-                <Link to="/favorites" activeProps={{ className: "group" }}>
+                <Link to="/favorites" activeProps={{className: "group"}}>
                     <ActionButton icon={<Star
                         width="24" height="24"
                         className='group-data-[status=active]:stroke-yellow-400'/>

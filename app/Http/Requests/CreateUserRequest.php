@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class CreateUserRequest extends FormRequest
@@ -24,7 +25,7 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'username' => ['required', 'string', 'unique:users,username', 'max:255'],
+            'username' => ['required', 'string', Rule::unique('users', 'username')->ignore($this->user), 'max:255'],
             'password' => [
                 'required',
                 Password::min(8)
@@ -41,5 +42,12 @@ class CreateUserRequest extends FormRequest
         $this->merge([
             'isAdmin' => filter_var($this->isAdmin, FILTER_VALIDATE_BOOLEAN),
         ]);
+    }
+
+    public function messages()
+    {
+        return [
+            'username.unique' => 'Это имя пользователя уже занято. Пожалуйста, выберите другое.',
+        ];
     }
 }

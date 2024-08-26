@@ -7,6 +7,7 @@ import {Form as FormProvider} from "@/components/ui/form.tsx";
 import Form from "@/form/category/Form.tsx";
 import Category, {TCategory} from "@/api/Category.ts";
 import Page from "@/form/Page.tsx";
+import {useToast} from "@/components/ui/use-toast.ts";
 
 export const Route = createFileRoute('/administration/categories/$id/update')({
     loader: ({params: {id}}) => Category.item<TCategory>(id),
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/administration/categories/$id/update')({
 
 function CategoriesUpdate() {
     const data = Route.useLoaderData()
+    const { toast } = useToast();
     const navigate = Route.useNavigate()
     const {id} = Route.useParams()
     const form = useForm<z.infer<typeof formSchema>>({
@@ -25,6 +27,9 @@ function CategoriesUpdate() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         await Category.update(id, values)
         await navigate({to: "/administration/categories"})
+        toast({
+            description: "Категория обновлена",
+        })
     }
 
     return (

@@ -28,7 +28,7 @@ export const columns: ColumnDef<TExpense>[] = [
                     type="text"
                     value={(column.getFilterValue() ?? '') as string}
                     onChange={e => column.setFilterValue(e.target.value)}
-                    placeholder="Наименование затрат"
+                    placeholder="Поиск по объектам"
                 />
             </Label>
         ),

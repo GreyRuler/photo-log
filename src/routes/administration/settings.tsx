@@ -10,6 +10,7 @@ import {FormSheetSync} from "@/form/settings/FormSheetSync.tsx";
 import Sheet from "@/api/Sheet.ts";
 import {formSchema as formSchemaSheetSync, FormSchemaSheetSync} from "@/form/settings/formSchemaSheetSync.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
+import {useSettings} from "@/context/settings.tsx";
 
 export const Route = createFileRoute('/administration/settings')({
     loader: () => Settings.get(),
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/administration/settings')({
 
 function Index() {
     const { toast } = useToast();
+    const settingsContext = useSettings()
     const data = Route.useLoaderData()
 
     const form = useForm({
@@ -30,6 +32,8 @@ function Index() {
         toast({
             description: "Настройки обновлены",
         })
+        const settings = await Settings.get()
+        await settingsContext.notify(settings)
     }
 
     const formSheetSync = useForm({
@@ -42,6 +46,8 @@ function Index() {
         toast({
             description: data.message
         })
+        const settings = await Settings.get()
+        await settingsContext.notify(settings)
     }
 
     return (

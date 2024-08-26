@@ -89,7 +89,7 @@ export function DataTable(
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     className={cn(
-                                        !row.original.count && !row.original.number && "pointer-events-none text-slate-400",
+                                        !row.original.number && !row.original.id && "pointer-events-none text-slate-400",
                                         "border-slate-500",
                                     )}
                                 >

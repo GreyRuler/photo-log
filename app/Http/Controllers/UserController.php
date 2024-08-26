@@ -52,7 +52,6 @@ class UserController extends Controller
         return $user->update([
             'name' => $data['name'],
             'username' => $user->username === 'admin' ? 'admin' : $data['username'],
-            'password' => bcrypt($data['password']),
             'isAdmin' => $user->username === 'admin' || $data['isAdmin'],
         ]);
     }
