@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\ConvertDateMiddleware;
 use App\Http\Resources\CategoryPhotoResource;
 use App\Models\Category;
 use App\Models\CategoryPhoto;
@@ -14,6 +15,7 @@ class CategoryPhotoController extends Controller
         private readonly CategoryPhotoService $photoService,
     )
     {
+        $this->middleware(ConvertDateMiddleware::class);
     }
 
     /**

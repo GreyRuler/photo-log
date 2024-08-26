@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\ConvertDateMiddleware;
 use App\Http\Resources\RecordPhotoResource;
 use App\Models\Record;
 use App\Models\RecordPhoto;
@@ -14,6 +15,7 @@ class RecordPhotoController extends Controller
         private readonly RecordPhotoService $photoService,
     )
     {
+        $this->middleware(ConvertDateMiddleware::class);
     }
 
     /**
