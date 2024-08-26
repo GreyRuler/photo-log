@@ -412,7 +412,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                                     </div>
                                 )}
                                 <div className="flex flex-col gap-2">
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 max-md:flex-col">
                                         <DateInput
                                             value={range.from}
                                             onChange={(date) => {
@@ -425,7 +425,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                                                 }))
                                             }}
                                         />
-                                        <div className="py-1">-</div>
+                                        <div className="py-1 max-md:hidden">-</div>
                                         <DateInput
                                             value={range.to}
                                             onChange={(date) => {

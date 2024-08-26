@@ -40,7 +40,7 @@ function Photos() {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="flex gap-2 p-4 bg-slate-700">
+            <div className="flex gap-2 p-4 bg-slate-700 max-md:flex-col">
                 <DateRangePicker
                     onUpdate={async (values) => {
                         const {range: {from, to}} = values
