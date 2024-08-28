@@ -79,4 +79,23 @@ class Setting extends Model
     public static function setSheetApi($value) {
         return self::setValue('sheet_api', $value);
     }
+
+    /**
+     * Геттер для main_url.
+     *
+     * @return mixed
+     */
+    public static function getMainUrl() {
+        return self::getValue('main_url');
+    }
+
+    /**
+     * Сеттер для main_url.
+     *
+     * @param string $value
+     * @return bool
+     */
+    public static function setMainUrl($value) {
+        return self::setValue('main_url', $value);
+    }
 }

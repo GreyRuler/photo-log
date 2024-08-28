@@ -16,6 +16,7 @@ class SettingsSeeder extends Seeder
             'event_name' => 'Default Event',
             'event_location' => 'Default Location',
             'sheet_api' => '',
+            'main_url' => '',
         ];
 
         foreach ($defaults as $key => $value) {

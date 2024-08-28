@@ -2,7 +2,7 @@ import {FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form.
 import {Button} from "@/components/ui/button.tsx";
 import {cn, formatDate, formatDateTimeOriginal} from "@/lib/utils.ts";
 import {Fragment, useState} from "react";
-import {Camera} from "lucide-react";
+import {Camera, Images} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useFormContext} from "react-hook-form";
 import ExifReader from 'exifreader';
@@ -10,6 +10,7 @@ import Compressor from 'compressorjs';
 import Spinner from "@/components/Spinner.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
 import heic2any from "heic2any";
+import {nanoid} from "nanoid";
 
 type Props = {
     location: string
@@ -92,44 +93,89 @@ export function FileInput({location}: Props) {
         });
     }
 
+    const clearImage = () => {
+        setBackgroundImage(null)
+        form.setValue('file', undefined)
+    }
+
     return (
         <FormField
             control={form.control}
             name="file"
-            render={({field}) => (
-                <FormItem className="flex flex-col items-center gap-2 justify-between space-y-0">
-                    <Button type="button" variant="secondary"
-                            className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700"
-                            style={{
-                                backgroundImage: `url(${field.value && backgroundImage})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                            }}
-                    >
-                        <FormLabel className={cn(
-                            "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
-                            field.value && "text-emerald-500"
-                        )}>
-                            {!!(field.value && backgroundImage) || isProcess || (
-                                <Fragment>
-                                    <Camera width="24" height="24"/>
-                                    <p className="font-bold">Загрузить фото</p>
-                                </Fragment>
-                            )}
-                            <FormControl>
-                                <Input {...fileRef} type="file" className="hidden"
-                                       accept="image/*,.heic,.heif,image/heic,image/heif"
-                                       onChange={(e) => {
-                                           fileRef.onChange(e)
-                                           e.target.files && handleFileChange(e.target.files)
-                                       }}/>
-                            </FormControl>
-                        </FormLabel>
-                        {isProcess && <div className="absolute"><Spinner/></div>}
-                    </Button>
-                </FormItem>
-            )}
+            render={({field}) => {
+                const labelPhoto = nanoid()
+                const labelGallery = nanoid()
+                return (
+                    <FormItem className="flex flex-col items-center gap-2 justify-between space-y-0">
+                        {field.value && backgroundImage
+                            ? <Fragment>
+                                <div className="relative h-32 w-full p-0" style={{
+                                    backgroundImage: `url(${field.value && backgroundImage})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "top",
+                                    backgroundRepeat: "no-repeat",
+                                }}></div>
+                                <Button
+                                    className="bg-slate-900 font-bold text-red-500 w-full text-base border focus:bg-red-500 focus:text-white border-red-900"
+                                    onClick={clearImage}>
+                                    Очистить фото
+                                </Button>
+                            </Fragment>
+                            : (<Fragment>
+                                <Button type="button" variant="secondary"
+                                        className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
+                                    <FormLabel className={cn(
+                                        "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
+                                        field.value && "text-emerald-500"
+                                    )} htmlFor={labelPhoto}>
+                                        {!!(field.value && backgroundImage) || isProcess || (
+                                            <Fragment>
+                                                <Camera width="24" height="24"/>
+                                                <p className="font-bold">Сделать фото</p>
+                                            </Fragment>
+                                        )}
+                                        <FormControl>
+                                            <Input {...fileRef} type="file" className="hidden"
+                                                   id={labelPhoto}
+                                                   accept="image/*,.heic,.heif,image/heic,image/heif"
+                                                   capture="environment"
+                                                   onChange={(e) => {
+                                                       fileRef.onChange(e);
+                                                       e.target.files && handleFileChange(e.target.files);
+                                                   }}/>
+                                        </FormControl>
+                                    </FormLabel>
+                                    {isProcess && <div className="absolute"><Spinner/></div>}
+                                </Button>
+                                <Button type="button" variant="secondary"
+                                        className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
+                                    <FormLabel className={cn(
+                                        "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
+                                        field.value && "text-emerald-500"
+                                    )} htmlFor={labelGallery}>
+                                        {!!(field.value && backgroundImage) || isProcess || (
+                                            <Fragment>
+                                                <Images width="24" height="24"/>
+                                                <p className="font-bold">Выбрать из медиатеки</p>
+                                            </Fragment>
+                                        )}
+                                        <FormControl>
+                                            <Input {...fileRef} type="file" className="hidden"
+                                                   accept="image/*,.heic,.heif,image/heic,image/heif"
+                                                   id={labelGallery}
+                                                   onChange={(e) => {
+                                                       fileRef.onChange(e);
+                                                       e.target.files && handleFileChange(e.target.files);
+                                                   }}/>
+                                        </FormControl>
+                                    </FormLabel>
+                                    {isProcess && <div className="absolute"><Spinner/></div>}
+                                </Button>
+                            </Fragment>)
+                        }
+                    </FormItem>
+                )
+            }}
         />
     )
 }

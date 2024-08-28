@@ -64,7 +64,9 @@ function Details() {
                 <p>Местоположение: <span className="text-emerald-500 font-bold">{location}</span></p>
                 <p>Реальное кол-во позиций: <span className="text-emerald-500 font-bold">{count}</span></p>
                 <p>Загружено на данный момент: <span className="text-emerald-500 font-bold">{innerCount}</span></p>
+                <br/>
                 <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{max}</span></p>
+                <br/>
                 <p>Дата, когда можно найти: <span className="text-emerald-500 font-bold">{timeArrival}</span></p>
                 <p>Крайняя дата загрузки: <span className="text-emerald-500 font-bold">{timeEnd}</span></p>
                 <p>Единица измерения: <span className="text-emerald-500 font-bold">{unit}</span></p>

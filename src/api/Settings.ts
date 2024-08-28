@@ -3,6 +3,7 @@ import {SettingsSchema} from "@/form/settings/formSchema.ts";
 
 export type DSettings = {
     sheet_api: string
+    main_url: string
     event_location: string
     event_name: string
 }

@@ -5,6 +5,7 @@ import {ACCESS_USER_KEY, NOTIFICATIONS_KEY, SETTINGS_KEY} from "@/config.ts";
 import {TNotification} from "@/api/Notification.ts";
 import {Priority} from "@/constants/priority.ts";
 import {DSettings} from "@/api/Settings.ts";
+import {toast} from "@/components/ui/use-toast.ts";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -125,4 +126,16 @@ export function dataURLtoFile(dataurl: string, filename: string) {
         u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], filename, {type: mime});
+}
+
+export function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+        toast({
+            description: "Скопировано!"
+        })
+    }).catch(() => {
+        toast({
+            description: "При копировании произошла ошибка("
+        })
+    });
 }

@@ -13,6 +13,7 @@ class SettingsController extends Controller
             'event_name' => Setting::getEventName(),
             'event_location' => Setting::getEventLocation(),
             'sheet_api' => Setting::getSheetApi(),
+            'main_url' => Setting::getMainUrl(),
         ]);
     }
 
@@ -20,6 +21,7 @@ class SettingsController extends Controller
     {
         Setting::setEventName($request->input('event_name'));
         Setting::setEventLocation($request->input('event_location'));
+        Setting::setMainUrl($request->input('main_url'));
         return response('Настройки обновлены', 201);
     }
 }

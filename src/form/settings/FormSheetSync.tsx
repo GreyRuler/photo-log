@@ -34,5 +34,5 @@ export function FormSheetSync({onSubmit}: Props) {
                 )}
             />
         </form>
-    );
+    )
 }
