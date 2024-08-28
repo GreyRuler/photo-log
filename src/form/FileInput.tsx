@@ -57,33 +57,21 @@ export function FileInput({location}: Props) {
             },
             drew(context, canvas) {
                 const fontSize = Math.round(canvas.width / 60);
-                const padding = 10;
-                const lineHeight = fontSize + 4;
-                const textHeight = lineHeight * 2 + padding * 2;
-
-                // Сохранение текущего состояния контекста
-                context.save();
-
-                // Сдвиг изображения вниз, чтобы освободить место для текста сверху
-                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.putImageData(imageData, 0, textHeight);
-
-                // Устанавливаем цвет фона для текста
-                context.fillStyle = 'white';
-                context.fillRect(0, 0, canvas.width, textHeight);
+                const padding = 20;
 
                 // Устанавливаем стиль текста
                 context.textAlign = 'right';
-                context.fillStyle = 'black';
+                context.fillStyle = 'white';
                 context.font = `${fontSize}px Arial`;
+                context.shadowColor = 'black';
+                context.shadowBlur = 7;
 
                 // Добавляем текст (дату и местоположение)
                 context.fillText(date, canvas.width - padding, fontSize + padding);
                 context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
 
-                // Восстановление контекста
-                context.restore();
+                // Убираем тень после рисования текста
+                context.shadowBlur = 0;
             },
             error(err) {
                 toast({

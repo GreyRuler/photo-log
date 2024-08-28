@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table"
 import {useState} from "react";
 import {TExpense} from "@/api/Record.ts";
-import {cn} from "@/lib/utils.ts";
+import {cn, doesNotContainDot} from "@/lib/utils.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon} from "@radix-ui/react-icons";
@@ -79,7 +79,9 @@ export function DataTable(
                     </TableHeader>
                     <TableBody className='z-0'>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row) => {
+                                console.log(row)
+                                return (
                                 <TableRow
                                     onClick={
                                         row.original.number
@@ -91,6 +93,7 @@ export function DataTable(
                                     className={cn(
                                         !row.original.number && !row.original.id && "pointer-events-none text-slate-400",
                                         "border-slate-500",
+                                        doesNotContainDot(row.id) && "font-bold"
                                     )}
                                 >
                                     {row.getVisibleCells().map((cell) => (
@@ -99,7 +102,7 @@ export function DataTable(
                                         </TableCell>
                                     ))}
                                 </TableRow>
-                            ))
+                            )})
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">

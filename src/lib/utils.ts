@@ -139,3 +139,6 @@ export function copyToClipboard(text: string) {
         })
     });
 }
+export function doesNotContainDot(str: string) {
+    return !str.includes('.');
+}
