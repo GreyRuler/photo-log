@@ -4,14 +4,15 @@ namespace App\Services;
 
 use App\Models\Record;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class RecordService
 {
-    public function getSortedRecordsByParams()
+    public function getSortedRecordsByParams(Collection $records)
     {
         $now = Carbon::now();
 
-        return Record::all()->map(function ($record) use ($now) {
+        return $records->map(function ($record) use ($now) {
             $innerCount = $record->photos->map(fn ($photo) => $photo->count)->sum();
             // Определяем приоритет
             if ($now->gt(Carbon::parse($record->timeEnd))) {
@@ -38,7 +39,7 @@ class RecordService
             $record->priority = $priority ?? 0;
 
             return $record;
-        })->sortBy('priority')->values();
+        })->sortByDesc('priority')->values();
     }
 
     public function getSortedRecordsByStars()

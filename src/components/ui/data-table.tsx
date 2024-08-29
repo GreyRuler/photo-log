@@ -84,7 +84,7 @@ export function DataTable(
                                 return (
                                 <TableRow
                                     onClick={
-                                        row.original.number
+                                        row.original.level >= 0
                                             ? row.getToggleExpandedHandler()
                                             : () => onRowNavigate(String(row.original.id))
                                     }

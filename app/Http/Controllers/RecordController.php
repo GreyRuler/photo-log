@@ -20,7 +20,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        return RecordResource::collection($this->recordService->getSortedRecordsByParams());
+        return RecordResource::collection($this->recordService->getSortedRecordsByParams(Record::all()));
     }
 
     /**

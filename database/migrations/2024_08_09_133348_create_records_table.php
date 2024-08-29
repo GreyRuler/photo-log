@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float('k'); // Коэффициент
             $table->string('location')->nullable(); // Локация
             $table->text('comment')->nullable(); // Комментарий
-            $table->text('folder'); // раздел
+            $table->integer('parent_id'); // раздел
             $table->integer('stars')->default(0);
             $table->timestamps(); // Поля created_at и updated_at
         });

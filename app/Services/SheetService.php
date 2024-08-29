@@ -3,53 +3,55 @@
 namespace App\Services;
 
 use App\Models\Record;
-use DateTime;
+use App\Models\Section;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class SheetService
 {
+    public function __construct(private readonly RecordService $recordService)
+    {
+    }
+
     public function structureData(Collection $data)
     {
         return $data->reduce(function ($acc, $curr) {
-            if (!empty($curr['id'])) {
-                $folder = $acc['stack']->reduce(fn ($acc, $curr) => $acc. '/'. rtrim($curr['number'], '.'), '');
-                $acc['records']->push([...$curr, 'folder' => $folder]);
-            }
-
             if (!empty($curr['number'])) {
                 // Определяем уровень заголовка по количеству точек
                 $level = substr_count($curr['number'], '.');
-
-                // Создаем новый раздел
-                $newSection = collect($curr)->put('subRows', collect());
 
                 // Удаляем разделы из стека, которые выше текущего уровня
                 while ($acc['stack']->count() >= $level) {
                     $acc['stack']->pop();
                 }
 
-                // Добавляем в родительский раздел или в корень
-                if ($acc['stack']->isNotEmpty()) {
-                    $acc['stack']->last()->get('subRows')->push($newSection);
-                } else {
-                    $acc['data']->push($newSection);
-                }
+                // Создаем новый раздел
+                $parent_id = $acc['stack']->count() > 0 ? $acc['stack'][$acc['stack']->count() - 1]['id'] : null;
+                $newSection = [
+                    'id' => $acc['id']++,
+                    'parent_id' => $parent_id,
+                    'name' => $curr['name'],
+                    'level' => $level,
+                ];
 
                 // Добавляем новый раздел в стек
-                $acc['stack']->push($newSection);
-            } else {
-                // Добавляем объект в текущий раздел
-                if ($acc['stack']->isNotEmpty()) {
-                    $acc['stack']->last()->get('subRows')->push($curr);
-                }
+                $acc['stack']->push(collect($newSection));
+
+                // Сохраняем раздел в коллекцию для вставки в таблицу
+                $acc['sections']->push($newSection);
+            }
+
+            if (!empty($curr['id'])) {
+                $acc['records']->push([...$curr, 'parent_id' => $acc['stack']->last()->get('id')]);
             }
 
             return $acc;
         }, [
             'data' => collect(),
             'stack' => collect(),
-            'records' => collect()
+            'records' => collect(),
+            'sections' => collect(),
+            'id' => 1,
         ]);
     }
 
@@ -67,5 +69,41 @@ class SheetService
                 $curr
             );
         });
+    }
+
+    public function updateOrCreateSections(Collection $data)
+    {
+        $data->each(function ($curr) {
+            Section::updateOrCreate(
+                ['id' => $curr['id']],
+                $curr
+            );
+        });
+    }
+
+    public function buildTree($sections, $parentId = null)
+    {
+        $tree = collect();
+
+        // Проходим по всем разделам и ищем те, у которых parent_id равен $parentId
+        foreach ($sections->where('parent_id', $parentId) as $section) {
+            // Рекурсивно строим дерево для каждого подраздела
+            $children = $this->buildTree($sections, $section['id']);
+
+            // Добавляем объекты в текущий раздел
+            $section['subRows'] = $this->recordService->getSortedRecordsByParams(
+                Record::where('parent_id', $section['id'])->get()
+            );
+
+            // Если есть дети, добавляем их к разделу
+            if ($children->isNotEmpty()) {
+                $section['subRows'] = $children;
+            }
+
+            // Добавляем раздел в дерево
+            $tree->push($section);
+        }
+
+        return $tree;
     }
 }

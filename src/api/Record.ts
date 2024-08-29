@@ -19,6 +19,7 @@ export type TExpense = {
     subRows?: TExpense[]
     priority: number
     stars: number
+    level: number
     photos: DRecordPhoto[]
 }
 

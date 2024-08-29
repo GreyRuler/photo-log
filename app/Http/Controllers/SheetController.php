@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
 use App\Models\Setting;
 use App\Services\SheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 class SheetController extends Controller
 {
@@ -30,6 +30,7 @@ class SheetController extends Controller
             $processedData = $this->sheetService->structureData(collect($data));
             $this->sheetService->saveDataToJson($processedData['data']);
             $this->sheetService->updateOrCreateRecords($processedData['records']);
+            $this->sheetService->updateOrCreateSections($processedData['sections']);
             return response()->json(['message' => 'Data processed and saved successfully']);
         } else {
             return response()->json(['status' => 'error', 'message' => $response->reason()], 500);
@@ -38,6 +39,7 @@ class SheetController extends Controller
 
     public function data()
     {
-        return response()->json(Storage::disk('local')->json('data.json'));
+        $sections = Section::all();
+        return $this->sheetService->buildTree($sections);
     }
 }

@@ -1,10 +1,9 @@
 import {z} from "zod";
 
 
-const formSchema = (max: number = 1) => z.object({
+const formSchema =  z.object({
     count: z.coerce.number()
-        .min(0, "Не меньше 0")
-        .max(max, `Не больше ${max}`),
+        .min(0, "Не меньше 0"),
     file: z.instanceof(File),
 })
 

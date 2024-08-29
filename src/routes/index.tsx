@@ -6,8 +6,10 @@ import {Search, Triangle} from "lucide-react";
 import {Fragment} from "react";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
-import {cn} from "@/lib/utils.ts";
+import {cn, getPriority} from "@/lib/utils.ts";
 import Sheet from "@/api/Sheet.ts";
+import {TooltipPriority} from "@/components/TooltipPriority.tsx";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
 export const Route = createFileRoute('/')({
     loader: () => Sheet.data(),
@@ -43,6 +45,26 @@ export const columns: ColumnDef<TExpense>[] = [
                 {getValue<boolean>()}
             </Fragment>
         ),
+    },
+    {
+        accessorKey: "priority",
+        header: () => <TooltipPriority/>,
+        cell: ({row: {original: {priority}}}) => {
+            const {color, text} = getPriority(priority)
+            return <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <div className={cn(
+                            "rounded-full size-3 m-auto cursor-pointer",
+                            color
+                        )}/>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{text}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        },
     },
 ]
 

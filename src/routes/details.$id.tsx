@@ -34,15 +34,15 @@ function Details() {
     const {toast} = useToast()
     const router = useRouter()
 
-    const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
-        resolver: zodResolver(formSchema(max)),
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
             count: min,
             file: undefined,
         },
     })
 
-    async function onSubmit(formData: z.infer<ReturnType<typeof formSchema>>) {
+    async function onSubmit(formData: z.infer<typeof formSchema>) {
         try {
             await RecordPhoto.create(formData, id)
             await router.invalidate()
@@ -96,7 +96,7 @@ function Details() {
                                                        type="number"
                                                        step="1" {...field}/>
                                             </FormControl>
-                                            <Button type="button" disabled={field.value === max}
+                                            <Button type="button"
                                                     className="p-2 bg-slate-800"
                                                     onClick={() => form.setValue("count", ++field.value)}>
                                                 <Plus/>
