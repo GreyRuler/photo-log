@@ -21,6 +21,7 @@ import {Slider} from "@/components/ui/slider.tsx";
 import {FileInput} from "@/form/FileInput.tsx";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 import RecordPhoto from "@/api/RecordPhoto.ts";
+import {useSettings} from "@/context/settings.tsx";
 
 export const Route = createFileRoute('/details/$id')({
     loader: ({params: {id}}) => Record.item<TExpense>(id),
@@ -33,6 +34,7 @@ function Details() {
     const min = 0
     const {toast} = useToast()
     const router = useRouter()
+    const {settings} = useSettings()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -74,7 +76,7 @@ function Details() {
             </div>
             <div className="m-4 p-4 bg-slate-900">
                 <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
                             name="count"
@@ -118,7 +120,7 @@ function Details() {
                                 )
                             }}
                         />
-                        <FileInput location={location}/>
+                        <FileInput location={settings?.event_location ?? ""}/>
                         <ButtonSubmit/>
                     </form>
                 </Form>
