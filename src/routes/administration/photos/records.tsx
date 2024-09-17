@@ -6,7 +6,7 @@ import {ImagesNotFound} from "@/components/ImagesNotFound.tsx";
 
 export const Route = createFileRoute('/administration/photos/records')({
     loaderDeps: ({ search: { dateFrom, dateTo } }) => ({ dateFrom, dateTo }),
-    loader: ({deps: {dateFrom, dateTo}}) => RecordPhoto.all<DRecordPhoto>(dateFrom, dateTo),
+    loader: ({deps: {dateFrom, dateTo}}) => RecordPhoto.all<DRecordPhoto>(dateFrom!, dateTo!),
     component: RecordsPhotos
 })
 

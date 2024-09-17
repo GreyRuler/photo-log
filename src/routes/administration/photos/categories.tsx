@@ -6,7 +6,7 @@ import {CategoryImageGrid} from "@/components/CategoryImageGrid.tsx";
 
 export const Route = createFileRoute('/administration/photos/categories')({
     loaderDeps: ({ search: { dateFrom, dateTo } }) => ({ dateFrom, dateTo }),
-    loader: ({deps: {dateFrom, dateTo}}) => CategoryPhoto.all<DCategoryPhoto>(dateFrom, dateTo),
+    loader: ({deps: {dateFrom, dateTo}}) => CategoryPhoto.all<DCategoryPhoto>(dateFrom!, dateTo!),
     component: CategoriesPhotos
 })
 
