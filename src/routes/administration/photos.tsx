@@ -12,8 +12,8 @@ const searchSchema = () => {
     const dateFrom = formatDate(new Date(date.setHours(0, 0, 0, 0)))
     const dateTo = formatDate(new Date(date.setHours(23, 59, 59, 999)))
     return z.object({
-        dateFrom: z.string().default(dateFrom),
-        dateTo: z.string().default(dateTo),
+        dateFrom: z.string().default(dateFrom).optional(),
+        dateTo: z.string().default(dateTo).optional(),
     })
 }
 

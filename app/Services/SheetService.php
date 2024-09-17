@@ -73,6 +73,7 @@ class SheetService
 
     public function updateOrCreateSections(Collection $data)
     {
+        Section::truncate();
         $data->each(function ($curr) {
             Section::updateOrCreate(
                 ['id' => $curr['id']],

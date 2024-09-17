@@ -18,4 +18,9 @@ export default class Settings {
         const {data} = await axiosClient.post('/settings/update', formData)
         return data
     }
+
+    static async truncateRecords() {
+        const {data} = await axiosClient.post('/settings/truncate-records')
+        return data
+    }
 }

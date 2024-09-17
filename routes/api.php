@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::post('/settings/update', [SettingsController::class, 'update']);
+    Route::post('/settings/truncate-records', [SettingsController::class, 'truncateRecords']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 

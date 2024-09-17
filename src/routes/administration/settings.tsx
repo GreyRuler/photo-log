@@ -1,5 +1,5 @@
 import Page from '@/form/Page'
-import {createFileRoute} from '@tanstack/react-router'
+import {createFileRoute, Link} from '@tanstack/react-router'
 import {useForm} from "react-hook-form";
 import {Form as FormProvider} from "@/components/ui/form.tsx";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,6 +11,15 @@ import Sheet from "@/api/Sheet.ts";
 import {formSchema as formSchemaSheetSync, FormSchemaSheetSync} from "@/form/settings/formSchemaSheetSync.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
 import {useSettings} from "@/context/settings.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {
+    Dialog, DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
 
 export const Route = createFileRoute('/administration/settings')({
     loader: () => Settings.get(),
@@ -18,7 +27,7 @@ export const Route = createFileRoute('/administration/settings')({
 })
 
 function Index() {
-    const { toast } = useToast();
+    const {toast} = useToast();
     const settingsContext = useSettings()
     const data = Route.useLoaderData()
 
@@ -50,6 +59,13 @@ function Index() {
         await settingsContext.notify(settings)
     }
 
+    async function onSubmitTruncateRecords() {
+        const {data} = await Settings.truncateRecords()
+        toast({
+            description: data.message
+        })
+    }
+
     return (
         <Page title="Настройки">
             <div className="space-y-8">
@@ -59,6 +75,36 @@ function Index() {
                 <FormProvider {...form}>
                     <Form onSubmit={onSubmit}/>
                 </FormProvider>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="destructive" className="flex flex-col h-fit w-full">
+                            <span>Удалить данные</span>
+                            <span>для таблицы объектов</span>
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[600px] bg-slate-900 text-white">
+                        <DialogHeader>
+                            <DialogTitle>Подтвердите удаление данных</DialogTitle>
+                            <DialogDescription>
+                                Все данные из таблиц и связанные фотографии будут безвозвратно удалены.
+                                Рекомендуется <Link search={{redirect: Route.fullPath}} className="underline text-blue-600" to="/administration/photos/download">скачать</Link> все фотографии перед выполнением этого действия.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="flex gap-2 justify-end">
+                            <DialogClose asChild>
+                                <Button variant="ghost" className="border">
+                                    Отменить
+                                </Button>
+                            </DialogClose>
+                            <Button
+                                variant="destructive"
+                                onClick={onSubmitTruncateRecords}
+                            >
+                                Подтвердить
+                            </Button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         </Page>
     )
