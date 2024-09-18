@@ -39,7 +39,7 @@ class RecordService
             $record->priority = $priority ?? 0;
 
             return $record;
-        })->sortByDesc('priority')->values();
+        })->sortBy('priority')->values();
     }
 
     public function getSortedRecordsByStars()
