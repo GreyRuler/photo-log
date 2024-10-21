@@ -1,0 +1,30 @@
+name: Cache npm packages
+
+env:
+  release_name: build_${{github.run_number}}
+
+on:
+    push:
+        branches: [ "main" ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install npm🔧
+              run: npm install
+
+            - name: Install composer🔧
+              run: composer install
+
+            - name: Archive
+              run: zip -5 -r build.zip ./
+          
+            - name: 'Create Release'
+              shell: bash
+              run: gh release create --generate-notes ${{ env.release_name }} build.zip
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
