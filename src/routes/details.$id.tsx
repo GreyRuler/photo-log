@@ -22,6 +22,7 @@ import {FileInput} from "@/form/FileInput.tsx";
 import {ButtonSubmit} from "@/form/ButtonSubmit.tsx";
 import RecordPhoto from "@/api/RecordPhoto.ts";
 import {useSettings} from "@/context/settings.tsx";
+import {RecordImageGrid} from "@/components/RecordImageGrid.tsx";
 
 export const Route = createFileRoute('/details/$id')({
     loader: ({params: {id}}) => Record.item<TExpense>(id),
@@ -29,8 +30,9 @@ export const Route = createFileRoute('/details/$id')({
 })
 
 function Details() {
-    const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location} = Route.useLoaderData()
+    const {id, name, count, innerCount, k, timeArrival, timeEnd, unit, comment, location, photos} = Route.useLoaderData()
     const max = Math.ceil(count * k - innerCount)
+    const required = Math.ceil(count * k)
     const min = 0
     const {toast} = useToast()
     const router = useRouter()
@@ -67,13 +69,14 @@ function Details() {
                 <p>Реальное кол-во позиций: <span className="text-emerald-500 font-bold">{count}</span></p>
                 <p>Загружено на данный момент: <span className="text-emerald-500 font-bold">{innerCount}</span></p>
                 <br/>
-                <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{max}</span></p>
+                <p>Необходимо загрузить: <span className="text-emerald-500 font-bold">{max < 0 ? 0 : max}</span></p>
                 <br/>
                 <p>Дата, когда можно найти: <span className="text-emerald-500 font-bold">{timeArrival}</span></p>
                 <p>Крайняя дата загрузки: <span className="text-emerald-500 font-bold">{timeEnd}</span></p>
                 <p>Единица измерения: <span className="text-emerald-500 font-bold">{unit}</span></p>
                 <p>Комментарий: <span className="text-emerald-500 font-bold">{comment}</span></p>
             </div>
+            {photos.length !== 0 && <RecordImageGrid images={photos}/>}
             <div className="m-4 p-4 bg-slate-900">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -109,12 +112,12 @@ function Details() {
                                             value={[field.value]}
                                             step={1}
                                             min={min}
-                                            max={max}
+                                            max={required}
                                             onValueChange={(value) => form.setValue("count", value[0])}
                                         />
                                         <div className="w-full flex justify-between px-1.5">
                                             <span className="text-muted-foreground">{min}</span>
-                                            <span className="text-muted-foreground">{max}</span>
+                                            <span className="text-muted-foreground">{required}</span>
                                         </div>
                                     </FormItem>
                                 )

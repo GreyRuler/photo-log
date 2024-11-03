@@ -4,7 +4,7 @@ import {nanoid} from "nanoid";
 
 type Props = {
     images: DRecordPhoto[]
-    onDelete: (id: number, owner: number) => void
+    onDelete?: (id: number, owner: number) => void
 }
 
 export function RecordImageGrid({images, onDelete}: Props) {

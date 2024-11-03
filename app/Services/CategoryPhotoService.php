@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Storage;
 class CategoryPhotoService
 {
     public function create(Request $request, Category $category) {
-        $file = $request->file('file');
+        $files = $request->file('files');
 
-        $path = $this->save($category->name, $file);
-        return CategoryPhoto::create([
-            'path' => $path,
-            'category_id' => $category->id
-        ]);
+        foreach ($files as $file) {
+            $path = $this->save($category->name, $file);
+            CategoryPhoto::create([
+                'path' => $path,
+                'category_id' => $category->id
+            ]);
+        }
+
+        return true;
     }
 
     public function save($category, $file)

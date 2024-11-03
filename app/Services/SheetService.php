@@ -96,9 +96,12 @@ class SheetService
                 Record::where('parent_id', $section['id'])->get()
             );
 
+            $section['priority'] = $section['subRows']->filter(fn($item) => $item['subRows'] ? $item : $item->priority === 2)->count('priority');
+
             // Если есть дети, добавляем их к разделу
             if ($children->isNotEmpty()) {
                 $section['subRows'] = $children;
+                $section['priority'] = $children->filter(fn($item) => $item->priority > 0)->count();
             }
 
             // Добавляем раздел в дерево

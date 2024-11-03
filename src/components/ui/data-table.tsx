@@ -80,7 +80,6 @@ export function DataTable(
                     <TableBody className='z-0'>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => {
-                                console.log(row)
                                 return (
                                 <TableRow
                                     onClick={
@@ -93,7 +92,7 @@ export function DataTable(
                                     className={cn(
                                         !row.original.number && !row.original.id && "pointer-events-none text-slate-400",
                                         "border-slate-500",
-                                        doesNotContainDot(row.id) && "font-bold"
+                                        doesNotContainDot(row.id) && "font-bold",
                                     )}
                                 >
                                     {row.getVisibleCells().map((cell) => (

@@ -28,7 +28,7 @@ function Upload() {
         resolver: zodResolver(formSchema(data.map(item => String(item.id)))),
         defaultValues: {
             category: String(data[0].id),
-            file: undefined
+            files: undefined
         }
     })
 

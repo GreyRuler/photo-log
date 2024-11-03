@@ -14,29 +14,29 @@ class RecordService
 
         return $records->map(function ($record) use ($now) {
             $innerCount = $record->photos->map(fn ($photo) => $photo->count)->sum();
-            // Определяем приоритет
-            if ($now->gt(Carbon::parse($record->timeEnd))) {
-                if ($innerCount == 0) {
-                    $priority = 1;
-                } elseif ($innerCount < $record->count) {
-                    $priority = 2;
-                } elseif ($innerCount < $record->count * $record->k) {
-                    $priority = 3;
-                }
-            } elseif ($now->gt(Carbon::parse($record->timeArrival)) && $now->lt(Carbon::parse($record->timeEnd))) {
-                if ($innerCount == 0) {
-                    $priority = 4;
-                } elseif ($innerCount < $record->count) {
-                    $priority = 5;
-                } elseif ($innerCount < $record->count * $record->k) {
-                    $priority = 6;
-                }
-            } else {
-                $priority = 7; // Задачи на будущее
+            try {
+                $record->innerCount = $innerCount / ($record->count * $record->k) * 100;
+            } catch (\Throwable $th) {
+                $record->innerCount = 0;
             }
 
-            // Добавляем поле приоритета к записи
-            $record->priority = $priority ?? 0;
+            // Определяем приоритет
+            if ($innerCount >= ($record->count * $record->k)) {
+                // приоритет зеленый - Задача закрыта
+                $record->priority = 4;
+                $record->innerCount = 100;
+            } elseif ($now->gt(Carbon::parse($record->timeEnd))) {
+                // приоритет красный - Задача просроченна
+                $record->priority = 3;
+            } elseif ($now->gt(Carbon::parse($record->timeArrival)) && $now->lt(Carbon::parse($record->timeEnd))) {
+                // приоритет желтый - Текущая задача
+                $record->priority = 2;
+            } elseif ($now->lt(Carbon::parse($record->timeArrival))) {
+                // приоритет голубой - Задача на будущее
+                $record->priority = 1;
+            } else {
+                $record->priority = 0;
+            }
 
             return $record;
         })->sortBy('priority')->values();

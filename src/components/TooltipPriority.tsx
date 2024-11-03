@@ -22,12 +22,9 @@ export function TooltipPriority() {
                     <DialogDescription>Эти индикаторы отображают уровень приоритета задач.</DialogDescription>
                 </DialogHeader>
                 <LinePriority priority={Priority.HIGH}/>
-                <LinePriority priority={Priority.MEDIUM_HIGH}/>
                 <LinePriority priority={Priority.MEDIUM}/>
-                <LinePriority priority={Priority.LOW_MEDIUM}/>
                 <LinePriority priority={Priority.LOW}/>
-                <LinePriority priority={Priority.VERY_LOW}/>
-                <LinePriority priority={Priority.MINIMAL}/>
+                <LinePriority priority={Priority.COMPLETE}/>
             </DialogContent>
         </Dialog>
     )

@@ -53,38 +53,23 @@ export function getPriority(priority: Priority) {
     switch (priority) {
         case Priority.HIGH:
             return {
-                color: 'bg-red-600',
-                text: "Просроченная задача, незакрытая позиция",
-            }
-        case Priority.MEDIUM_HIGH:
-            return {
-                color: 'bg-red-400',
-                text: "Просроченная задача, частично закрытая позиция",
+                color: 'bg-blue-600',
+                text: "Задача на будущее",
             }
         case Priority.MEDIUM:
             return {
-                color: 'bg-red-200',
-                text: "Просроченная задача, закрытая без учета коэффициента",
-            }
-        case Priority.LOW_MEDIUM:
-            return {
-                color: 'bg-yellow-600',
-                text: "Текущая задача, незакрытая позиция",
+                color: 'bg-yellow-400 text-black',
+                text: "Текущая задача",
             }
         case Priority.LOW:
             return {
-                color: 'bg-yellow-400',
-                text: "Текущая задача, частично закрытая позиция",
+                color: 'bg-red-600',
+                text: "Задача просроченна",
             }
-        case Priority.VERY_LOW:
+        case Priority.COMPLETE:
             return {
-                color: 'bg-yellow-200',
-                text: "Текущая задача, закрытая без учета коэффициента",
-            }
-        case Priority.MINIMAL:
-            return {
-                color: 'bg-green-600',
-                text: "Задача на будущее",
+                color: 'bg-green-600 text-black',
+                text: "Задача закрыта",
             }
         default:
             return {

@@ -13,10 +13,11 @@ import {Button} from "@/components/ui/button.tsx";
 import {DRecordPhoto} from "@/api/RecordPhoto.ts";
 import {DCategoryPhoto} from "@/api/CategoryPhoto.ts";
 import {ReactNode} from "react";
+import {cn} from "@/lib/utils.ts";
 
 type Props = {
     image: DRecordPhoto | DCategoryPhoto
-    onDelete: (id: number, owner: number) => void
+    onDelete?: (id: number, owner: number) => void
     children: ReactNode
 };
 
@@ -59,12 +60,15 @@ export function Image({image, onDelete, children}: Props) {
                     <CarouselPrevious variant="outline" className="bg-slate-900"/>
                     <CarouselNext variant="outline" className="bg-slate-900"/>
                 </Carousel>
-                <DrawerFooter className="pt-2 grid grid-cols-2">
-                    <DrawerClose asChild>
+                <DrawerFooter className={cn(
+                    "pt-2",
+                    onDelete && "grid grid-cols-2"
+                )}>
+                    {onDelete && <DrawerClose asChild>
                         <Button
                             className="bg-slate-900 font-bold text-red-500 w-full text-base border focus:bg-red-500 focus:text-white border-red-900"
                             variant="outline" onClick={() => onDelete(image.id, image.owner)}>Удалить</Button>
-                    </DrawerClose>
+                    </DrawerClose>}
                     <Button
                         className="bg-slate-900 font-bold text-blue-500 w-full text-base border focus:bg-blue-500 focus:text-white border-blue-500"
                         variant="outline" onClick={() => onDownload(image.path)}>Скачать</Button>
@@ -72,4 +76,4 @@ export function Image({image, onDelete, children}: Props) {
             </DrawerContent>
         </Drawer>
     );
-};
+}

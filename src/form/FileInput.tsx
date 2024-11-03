@@ -11,6 +11,8 @@ import Spinner from "@/components/Spinner.tsx";
 import {useToast} from "@/components/ui/use-toast.ts";
 import heic2any from "heic2any";
 import {nanoid} from "nanoid";
+import {Label} from "@/components/ui/label.tsx";
+import {Checkbox} from "@/components/ui/checkbox.tsx";
 
 type Props = {
     location: string
@@ -19,20 +21,20 @@ type Props = {
 export function FileInput({location}: Props) {
     const form = useFormContext()
     const {toast} = useToast()
+    const [watermark, setWatermark] = useState(true)
     const [backgroundImage, setBackgroundImage] = useState<string | ArrayBuffer | null | undefined>(null);
     const fileRef = form.register('file', {required: true})
     const [isProcess, setProcess] = useState(false)
 
-    async function handleFileChange(fileList: FileList) {
+    async function handleFileChange(file: File) {
         setProcess(true)
         setBackgroundImage(null)
-        let file = fileList[0];
         if (!file) return
         const {name: filename} = file
         if (file.type === "image/heic") {
             const mimeType = "image/jpeg"
             const convertedBlobs = await heic2any({
-                blob: fileList[0],
+                blob: file,
                 toType: mimeType,
             });
             const blob = Array.isArray(convertedBlobs) ? convertedBlobs[0] : convertedBlobs;
@@ -56,22 +58,24 @@ export function FileInput({location}: Props) {
                 setProcess(false)
             },
             drew(context, canvas) {
-                const fontSize = Math.round(canvas.width / 60);
-                const padding = 20;
+                if (watermark) {
+                    const fontSize = Math.round(canvas.width / 60);
+                    const padding = 20;
 
-                // Устанавливаем стиль текста
-                context.textAlign = 'right';
-                context.fillStyle = 'white';
-                context.font = `${fontSize}px Arial`;
-                context.shadowColor = 'black';
-                context.shadowBlur = 7;
+                    // Устанавливаем стиль текста
+                    context.textAlign = 'right';
+                    context.fillStyle = 'white';
+                    context.font = `${fontSize}px Arial`;
+                    context.shadowColor = 'black';
+                    context.shadowBlur = 7;
 
-                // Добавляем текст (дату и местоположение)
-                context.fillText(date, canvas.width - padding, fontSize + padding);
-                context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
+                    // Добавляем текст (дату и местоположение)
+                    context.fillText(date, canvas.width - padding, fontSize + padding);
+                    context.fillText(location, canvas.width - padding, fontSize * 2 + padding + 4);
 
-                // Убираем тень после рисования текста
-                context.shadowBlur = 0;
+                    // Убираем тень после рисования текста
+                    context.shadowBlur = 0;
+                }
             },
             error(err) {
                 toast({
@@ -87,83 +91,94 @@ export function FileInput({location}: Props) {
     }
 
     return (
-        <FormField
-            control={form.control}
-            name="file"
-            render={({field}) => {
-                const labelPhoto = nanoid()
-                const labelGallery = nanoid()
-                return (
-                    <FormItem className="flex flex-col items-center gap-2 justify-between space-y-0">
-                        {field.value && backgroundImage
-                            ? <Fragment>
-                                <div className="relative h-32 w-full p-0" style={{
-                                    backgroundImage: `url(${field.value && backgroundImage})`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "top",
-                                    backgroundRepeat: "no-repeat",
-                                }}></div>
-                                <Button
-                                    className="bg-slate-900 font-bold text-red-500 w-full text-base border focus:bg-red-500 focus:text-white border-red-900"
-                                    onClick={clearImage}>
-                                    Очистить фото
-                                </Button>
-                            </Fragment>
-                            : (<Fragment>
-                                <Button type="button" variant="secondary"
-                                        className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
-                                    <FormLabel className={cn(
-                                        "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
-                                        field.value && "text-emerald-500"
-                                    )} htmlFor={labelPhoto}>
-                                        {!!(field.value && backgroundImage) || isProcess || (
-                                            <Fragment>
-                                                <Camera width="24" height="24"/>
-                                                <p className="font-bold">Сделать фото</p>
-                                            </Fragment>
-                                        )}
-                                        <FormControl>
-                                            <Input {...fileRef} type="file" className="hidden"
-                                                   id={labelPhoto}
-                                                   accept="image/*,.heic,.heif,image/heic,image/heif"
-                                                   capture="environment"
-                                                   onChange={(e) => {
-                                                       fileRef.onChange(e);
-                                                       e.target.files && handleFileChange(e.target.files);
-                                                   }}/>
-                                        </FormControl>
-                                    </FormLabel>
-                                    {isProcess && <div className="absolute"><Spinner/></div>}
-                                </Button>
-                                <Button type="button" variant="secondary"
-                                        className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
-                                    <FormLabel className={cn(
-                                        "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
-                                        field.value && "text-emerald-500"
-                                    )} htmlFor={labelGallery}>
-                                        {!!(field.value && backgroundImage) || isProcess || (
-                                            <Fragment>
-                                                <Images width="24" height="24"/>
-                                                <p className="font-bold">Выбрать из медиатеки</p>
-                                            </Fragment>
-                                        )}
-                                        <FormControl>
-                                            <Input {...fileRef} type="file" className="hidden"
-                                                   accept="image/*,.heic,.heif,image/heic,image/heif"
-                                                   id={labelGallery}
-                                                   onChange={(e) => {
-                                                       fileRef.onChange(e);
-                                                       e.target.files && handleFileChange(e.target.files);
-                                                   }}/>
-                                        </FormControl>
-                                    </FormLabel>
-                                    {isProcess && <div className="absolute"><Spinner/></div>}
-                                </Button>
-                            </Fragment>)
-                        }
-                    </FormItem>
-                )
-            }}
-        />
+        <Fragment>
+            <Label htmlFor="watermark" className="flex text-base gap-4">
+                <Checkbox id="watermark" defaultChecked={watermark} onClick={() => setWatermark(prev => !prev)}
+                          className="size-6 bg-slate-600 data-[state=checked]:bg-slate-600 data-[state=checked]:text-primary-foreground" />
+                Водяная метка
+            </Label>
+            <FormField
+                control={form.control}
+                name="file"
+                render={({field}) => {
+                    const labelPhoto = nanoid()
+                    const labelGallery = nanoid()
+                    return (
+                        <FormItem className="flex flex-col items-center gap-2 justify-between space-y-0">
+                            {field.value && backgroundImage
+                                ? <Fragment>
+                                    <div className="relative h-32 w-full p-0" style={{
+                                        backgroundImage: `url(${field.value && backgroundImage})`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "top",
+                                        backgroundRepeat: "no-repeat",
+                                    }}></div>
+                                    <Button
+                                        className="bg-slate-900 font-bold text-red-500 w-full text-base border focus:bg-red-500 focus:text-white border-red-900"
+                                        onClick={clearImage}>
+                                        Очистить фото
+                                    </Button>
+                                </Fragment>
+                                : (<Fragment>
+                                    <Button type="button" variant="secondary"
+                                            className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
+                                        <FormLabel className={cn(
+                                            "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
+                                            field.value && "text-emerald-500"
+                                        )} htmlFor={labelPhoto}>
+                                            {!!(field.value && backgroundImage) || isProcess || (
+                                                <Fragment>
+                                                    <Camera width="24" height="24"/>
+                                                    <p className="font-bold">Сделать фото</p>
+                                                </Fragment>
+                                            )}
+                                            <FormControl>
+                                                <Input {...fileRef} type="file" className="hidden"
+                                                       id={labelPhoto}
+                                                       accept="image/*,.heic,.heif,image/heic,image/heif"
+                                                       capture="environment"
+                                                       onChange={(e) => {
+                                                           fileRef.onChange(e);
+                                                           const file = e.target.files?.[0];
+                                                           if (!file) return
+                                                           handleFileChange(file);
+                                                       }}/>
+                                            </FormControl>
+                                        </FormLabel>
+                                        {isProcess && <div className="absolute"><Spinner/></div>}
+                                    </Button>
+                                    <Button type="button" variant="secondary"
+                                            className="relative h-32 w-full p-0 bg-slate-700 active:bg-slate-900 hover:bg-slate-700">
+                                        <FormLabel className={cn(
+                                            "w-full h-full text-center text-base whitespace-nowrap flex flex-col items-center justify-center",
+                                            field.value && "text-emerald-500"
+                                        )} htmlFor={labelGallery}>
+                                            {!!(field.value && backgroundImage) || isProcess || (
+                                                <Fragment>
+                                                    <Images width="24" height="24"/>
+                                                    <p className="font-bold">Выбрать из медиатеки</p>
+                                                </Fragment>
+                                            )}
+                                            <FormControl>
+                                                <Input {...fileRef} type="file" className="hidden"
+                                                       accept="image/*,.heic,.heif,image/heic,image/heif"
+                                                       id={labelGallery}
+                                                       onChange={(e) => {
+                                                           fileRef.onChange(e);
+                                                           const file = e.target.files?.[0];
+                                                           if (!file) return
+                                                           handleFileChange(file);
+                                                       }}/>
+                                            </FormControl>
+                                        </FormLabel>
+                                        {isProcess && <div className="absolute"><Spinner/></div>}
+                                    </Button>
+                                </Fragment>)
+                            }
+                        </FormItem>
+                    )
+                }}
+            />
+        </Fragment>
     )
 }
